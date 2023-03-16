@@ -1,11 +1,11 @@
 #### Preamble ####
-# Purpose: Cleans.... [...UPDATE THIS...]
-# Author: Rohan Alexander [...UPDATE THIS...]
-# Data: 11 February 2023 [...UPDATE THIS...]
-# Contact: rohan.alexander@utoronto.ca [...UPDATE THIS...]
+# Purpose: Data cleaning for GSS 2021
+# Author: Ruibo Sun
+# Data: 16 March 2023
+# Contact: ruibo.sun@mail.utoronto.ca
 # License: MIT
-# Pre-requisites: [...UPDATE THIS...]
-# Any other information needed? [...UPDATE THIS...]
+# Pre-requisites: Download all the packges under the Workspace section
+# Any other information needed? None
 
 
 #### Workspace setup ####
@@ -31,15 +31,29 @@ raw_data$paeduc <- as.character(raw_data$paeduc)
 raw_data$educ <- as.character(raw_data$educ)
 
 #change no formal to 0
-raw_data<-raw_data%>%mutate_all(~ifelse(. == "no formal schooling", 0, .))%>%
+cleaned_data<-raw_data%>%mutate_all(~ifelse(. == "no formal schooling", 0, .))%>%
   mutate_all(as.numeric)
 
 #group variables into levels
 
+mepa<-median(cleaned_data$papres10,na.rm=TRUE)
+mema<-median(cleaned_data$mapres10,na.rm=TRUE)
+
+cleaned_data <- cleaned_data %>%
+  mutate(father_factor = case_when(
+    papres10 < mepa ~ "Lower than Median",
+    papres10 >= mepa ~ "Above and Equal to Median"
+  ))
+
+cleaned_data <- cleaned_data %>%
+  mutate(mother_factor = case_when(
+    mapres10 < mema ~ "Lower than Median",
+    mapres10 >= mema ~ "Above and Equal to Median"
+  ))
 
 
 #### Save data ####
 # [...UPDATE THIS...]
 # change cleaned_data to whatever name you end up with at the end of cleaning
-write_csv(cleaned_data, "outputs/data/cleaned_data.csv")
+write_csv(cleaned_data, "inputs/data/GSS2021.dta")
 

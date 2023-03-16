@@ -6,7 +6,7 @@ author:
   - Another author
 thanks: "Code and data are available at: LINK."
 date: "`r Sys.time()`"
-date-format: "D MMMM YYYY"
+date-format: "12-03-2023"
 abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
 format: pdf
 number-sections: true
@@ -17,8 +17,11 @@ bibliography: references.bib
 #| include: false
 #| warning: false
 #| message: false
-
+library(broom)
+library(knitr)
+library(kableExtra)
 library(tidyverse)
+library(dplyr)
 ```
 
 
@@ -37,16 +40,78 @@ Our data is of penguins (@fig-bills).
 #| fig-cap: Bills of penguins
 #| echo: false
 
-model<-lm(educ~mapres10+papres10+paeduc+maeduc,data=raw_data)
-summary(model)
-pairs(raw_data)
-# ggplot(penguins, aes(x = island, fill = species)) +
-#   geom_bar(alpha = 0.8) +
-#   scale_fill_manual(values = c("darkorange","purple","cyan4"),
-#                     guide = "none") +
-#   theme_minimal() +
-#   facet_wrap(~species, ncol = 1) +
-#   coord_flip()
+# Fit the model
+model <- lm(educ ~ mapres10 + papres10 + paeduc + maeduc, data = cleaned_data)
+
+# Get the summary statistics and tidy them up
+tidy_summary <- tidy(summary(model))
+
+# Create a data frame for the tidy summary
+summary_df <- as.data.frame(tidy_summary)
+
+# # Rename the row names
+# row_names <- c("Intercept", "Mother's Prestiges Score", "Father's Prestiges Score", "Father's Education", "Mother's Education")
+# rownames(summary_df) <- row_names
+
+# Rename the column names
+col_names <- c("Term", "Estimate", "Std. Error", "t value", "Pr(>|t|)")
+colnames(summary_df) <- col_names
+
+# Print the summary table with kableExtra
+library(kableExtra)
+kable(summary_df, align = c("l", "r", "r", "r", "r"), 
+      caption = "Summary of Linear Regression Model",) %>%
+  kable_styling(bootstrap_options = "striped", full_width = FALSE)
+
+```
+
+```{r}
+#| label: fig-billssssss
+#| fig-cap: More bills of penguins
+#| echo: false
+#| fig-width: 8
+#| fig-height: 4
+ggplot(data = cleaned_data, aes(x = educ)) +
+  
+  geom_histogram(aes(y = ..density..), binwidth = 2, fill = "white") +
+  geom_density(alpha = .2, fill = "lightblue") +
+  
+  # geom_histogram(bins = 15, fill = "lightblue", color = "white") +
+  labs(title = "Histogram of Respondents' Education", x = "Education (in Years)", y = "Desensity") +
+   scale_x_continuous(breaks = seq(0, 20, by = 1))+
+  theme_bw()
+```
+
+```{r}
+#| label: fig-billssssss
+#| fig-cap: More bills of penguins
+#| echo: false
+#| fig-width: 8
+#| fig-height: 4
+ggplot(cleaned_data, aes(x = mapres10)) +
+  geom_histogram(aes(y = ..density.., fill = "mapres10"), alpha = 0.8, binwidth = 2,color = "black") +
+  geom_histogram(aes(x = papres10, y = ..density.., fill = "paeduc"), alpha = 0.4, binwidth = 2,color = "black") +
+  scale_fill_manual(values = c("mapres10" = "lightblue", "paeduc" = "red"), name = "Variables") +
+  labs(title = "Difference in Mother's and Father's Prestige Score",
+       x = "Prestige Score",
+       y = "Density")+
+  theme_bw()
+```
+
+```{r}
+#| label: fig-billssssss
+#| fig-cap: More bills of penguins
+#| echo: false
+#| fig-width: 8
+#| fig-height: 4
+ggplot(cleaned_data, aes(x = maeduc)) +
+  geom_histogram(aes(y = ..density.., fill = "maeduc"), alpha = 0.8, binwidth = 1, color = "black") +
+  geom_histogram(aes(x = paeduc, y = ..density.., fill = "paeduc"), alpha = 0.4, binwidth = 1, color = "black") +
+  scale_fill_manual(values = c("maeduc" = "lightblue", "paeduc" = "red"), name = "Variables") +
+  labs(title = "Differene in Mother's Education and Father's Education",
+       x = "Education (in Years)",
+       y = "Density") +
+  theme_bw()
 ```
 
 Talk more about it.
@@ -60,8 +125,28 @@ Also bills and their average (@fig-billssssss). (You can change the height and w
 #| fig-width: 8
 #| fig-height: 4
 
-ggplot(raw_data, aes(x = papres10, y = educ)) +
-  geom_point(alpha=0.3)
+ggplot(cleaned_data, aes(x = educ, fill = factor(father_factor))) +
+  geom_histogram(position = "dodge", binwidth = 1.5, alpha = 0.5, color = "black")+
+   labs(title = "Father's Prestige Score and Education",
+       x = "Education (in Years)",
+       y = "Count",
+       fill = "Level of Prestige Score")+
+  theme_bw()
+```
+
+```{r}
+#| label: fig-billssssss
+#| fig-cap: More bills of penguins
+#| echo: false
+#| fig-width: 8
+#| fig-height: 4
+ggplot(cleaned_data, aes(x = educ, fill = factor(mother_factor))) +
+  geom_histogram(position = "dodge", binwidth = 1.5, alpha = 0.5, color = "black")+
+     labs(title = "Mother's Prestige Score and Education",
+       x = "Education (in Years)",
+       y = "Count",
+       fill = "Level of Prestige Score")+
+  theme_bw()
 ```
 
 Talk way more about it. 
@@ -96,15 +181,6 @@ If my paper were 10 pages, then should be be at least 2.5 pages. The discussion 
 ## Weaknesses and next steps
 
 Weaknesses and next steps should also be included.
-
-\newpage
-
-\appendix
-
-# Appendix {-}
-
-
-# Additional details
 
 
 \newpage
