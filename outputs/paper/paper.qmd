@@ -2,15 +2,14 @@
 title: "My title"
 subtitle: "My subtitle if needed"
 author: 
-  - First author
-  - Another author
-thanks: "Code and data are available at: LINK."
+  - Ruibo Sun
+thanks: "https://github.com/ruibosun/how-parents-affect-childrens-education"
 date: "`r Sys.time()`"
 date-format: "12-03-2023"
 abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
 format: pdf
 number-sections: true
-bibliography: references.bib
+#bibliography: references.bib
 ---
 
 ```{r}
@@ -22,6 +21,17 @@ library(knitr)
 library(kableExtra)
 library(tidyverse)
 library(dplyr)
+library(here)
+library(haven)
+library(scales)
+library(dplyr)
+library(purrr)
+library(forcats)
+```
+
+```{r,echo=FALSE}
+cleaned_data <- read_csv(
+  file = here("inputs/data/GSS2021 2.csv"))
 ```
 
 
@@ -36,7 +46,7 @@ You can and should cross-reference sections and sub-sections. For instance, @sec
 Our data is of penguins (@fig-bills).
 
 ```{r}
-#| label: fig-bills
+#| label: fig-bills1
 #| fig-cap: Bills of penguins
 #| echo: false
 
@@ -53,20 +63,42 @@ summary_df <- as.data.frame(tidy_summary)
 # row_names <- c("Intercept", "Mother's Prestiges Score", "Father's Prestiges Score", "Father's Education", "Mother's Education")
 # rownames(summary_df) <- row_names
 
-# Rename the column names
-col_names <- c("Term", "Estimate", "Std. Error", "t value", "Pr(>|t|)")
-colnames(summary_df) <- col_names
+# # Rename the column names
+# col_names <- c("Term", "Estimate", "Std. Error", "t value", "Pr(>|t|)")
+# colnames(summary_df) <- col_names
+# 
+# # Print the summary table with kableExtra
+# library(kableExtra)
+# kable(summary_df, align = c("l", "r", "r", "r", "r"), 
+#       caption = "Summary of Linear Regression Model",) %>%
+#   kable_styling(bootstrap_options = "striped", full_width = FALSE)
 
-# Print the summary table with kableExtra
-library(kableExtra)
-kable(summary_df, align = c("l", "r", "r", "r", "r"), 
-      caption = "Summary of Linear Regression Model",) %>%
-  kable_styling(bootstrap_options = "striped", full_width = FALSE)
+```
+```{r}
+#| label: fig-billssssss0
+#| fig-cap: More bills of penguins
+#| echo: false
+#| fig-width: 8
+#| fig-height: 4
 
+#level_order <- c(NA, "less than high school", "high school", "associate/junior college", "bachelor's", "graduate")
+
+tb1 <- cleaned_data %>% 
+  count(degree) %>% 
+  mutate(percent=percent(x=n/sum(n))) %>% 
+  rename(Degree = degree, Frequency = n, Proportion = percent)
+
+#tb1$Degree <- factor(tb1$Degree, levels = level_order)
+tb1<-tb1%>%arrange(factor(tb1$Degree,c("graduate", "bachelor's", "associate/junior college", "high school", "less than high school", NA)))
+
+  # arrange(Degree) %>% 
+  # mutate(Degree = fct_relevel(Degree, "less than high school", "high school", "associate/junior college", "bachelor's", "graduate", .missing = "NA"))
+
+tb1%>%kable(booktabs = TRUE)
 ```
 
 ```{r}
-#| label: fig-billssssss
+#| label: fig-billssssss2
 #| fig-cap: More bills of penguins
 #| echo: false
 #| fig-width: 8
@@ -83,71 +115,89 @@ ggplot(data = cleaned_data, aes(x = educ)) +
 ```
 
 ```{r}
-#| label: fig-billssssss
+#| label: fig-billssssss3
 #| fig-cap: More bills of penguins
 #| echo: false
 #| fig-width: 8
 #| fig-height: 4
 ggplot(cleaned_data, aes(x = mapres10)) +
-  geom_histogram(aes(y = ..density.., fill = "mapres10"), alpha = 0.8, binwidth = 2,color = "black") +
+  geom_histogram(aes(y = ..density.., fill = "mapres10"), alpha = 1, binwidth = 2,color = "black") +
   geom_histogram(aes(x = papres10, y = ..density.., fill = "paeduc"), alpha = 0.4, binwidth = 2,color = "black") +
   scale_fill_manual(values = c("mapres10" = "lightblue", "paeduc" = "red"), name = "Variables") +
-  labs(title = "Difference in Mother's and Father's Prestige Score",
+  labs(title = "Difference between Mother's and Father's Prestige Score",
        x = "Prestige Score",
        y = "Density")+
   theme_bw()
 ```
 
 ```{r}
-#| label: fig-billssssss
+#| label: fig-billssssss4
 #| fig-cap: More bills of penguins
 #| echo: false
 #| fig-width: 8
 #| fig-height: 4
 ggplot(cleaned_data, aes(x = maeduc)) +
-  geom_histogram(aes(y = ..density.., fill = "maeduc"), alpha = 0.8, binwidth = 1, color = "black") +
+  geom_histogram(aes(y = ..density.., fill = "maeduc"), alpha = 1, binwidth = 1, color = "black") +
   geom_histogram(aes(x = paeduc, y = ..density.., fill = "paeduc"), alpha = 0.4, binwidth = 1, color = "black") +
   scale_fill_manual(values = c("maeduc" = "lightblue", "paeduc" = "red"), name = "Variables") +
-  labs(title = "Differene in Mother's Education and Father's Education",
+  labs(title = "Differene between Mother's Education and Father's Education",
        x = "Education (in Years)",
        y = "Density") +
   theme_bw()
 ```
+
 
 Talk more about it.
 
 Also bills and their average (@fig-billssssss). (You can change the height and width, but don't worry about doing that until you have finished every other aspect of the paper - Quarto will try to make it look nice and the defaults usually work.)
 
 ```{r}
-#| label: fig-billssssss
+#| label: fig-billssssss5
 #| fig-cap: More bills of penguins
 #| echo: false
 #| fig-width: 8
 #| fig-height: 4
 
-ggplot(cleaned_data, aes(x = educ, fill = factor(father_factor))) +
+ggplot(cleaned_data, aes(x = educ, fill = factor(born))) +
   geom_histogram(position = "dodge", binwidth = 1.5, alpha = 0.5, color = "black")+
-   labs(title = "Father's Prestige Score and Education",
+   labs(title = "Education and Birthplace (if outside of US) for the Respondent",
        x = "Education (in Years)",
        y = "Count",
-       fill = "Level of Prestige Score")+
+       fill = "Birthplace of the Respondent \n (if outside of US)")+
   theme_bw()
 ```
 
 ```{r}
-#| label: fig-billssssss
+#| label: fig-billssssss6
 #| fig-cap: More bills of penguins
 #| echo: false
 #| fig-width: 8
 #| fig-height: 4
-ggplot(cleaned_data, aes(x = educ, fill = factor(mother_factor))) +
-  geom_histogram(position = "dodge", binwidth = 1.5, alpha = 0.5, color = "black")+
-     labs(title = "Mother's Prestige Score and Education",
+ggplot(cleaned_data, aes(x = educ,fill = factor(reg16))) +
+  geom_histogram(binwidth = 2, color = "black") +
+  facet_wrap(~ reg16, ncol = 3)+
+  labs(title = "Respondent's Living Region at Age of 16 v.s. Education",
        x = "Education (in Years)",
-       y = "Count",
-       fill = "Level of Prestige Score")+
+       y = "Count")+
+  theme_bw()+
+  theme(legend.position = "none")
+```
+
+
+```{r}
+#| label: fig-billssssss7
+#| fig-cap: More bills of penguins
+#| echo: false
+#| fig-width: 8
+#| fig-height: 4
+ggplot(cleaned_data, aes(x = maeduc, y = paeduc, color = factor(incom16))) +
+  geom_point() +
+  stat_smooth(method = "loess", se = FALSE) +
+  labs(x = "Mother's Education (in Years)", y = "Father's Education (in Years)", color = "Family Income")+
   theme_bw()
 ```
+
+
 
 Talk way more about it. 
 
