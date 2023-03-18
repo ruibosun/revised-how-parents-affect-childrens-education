@@ -39,6 +39,19 @@ cleaned_data <- read_csv(
 
 You can and should cross-reference sections and sub-sections. For instance, @sec-data and @sec-first-point. 
 
+In the past, family status variables, such as the socio-economic status and educational level of parents, were commonly considered as strong predictors of academic achievement in children. More specifically, parents who have lower levels of education, those with higher levels of education are more inclined to view higher education as desirable and encourage their children to excel academically. They also tend to hold higher expectations for their children's academic performance. 
+(https://www.academia.edu/2712079/How_does_parents_education_level_influence_parenting_and_childrens_achievement)
+
+One potential explanation for this relationship is that higher levels of education can provide parents with access to resources such as income, time, energy, and community contacts, which can enable greater involvement in a child's education. As a result, the influence of family status variables on children's academic achievement may be best understood as a complex interaction between status and process variables (https://files.eric.ed.gov/fulltext/EJ1079955.pdf).
+
+However, recent research has indicated that the relationship between these factors and academic achievement is not always direct. Instead, socio-economic status and parents' education are part of a larger set of psychological and sociological variables that can impact children's educational outcomes (https://files.eric.ed.gov/fulltext/EJ1079955.pdf).
+
+This paper will test and explore how parents’ social-economics status can affect childrens’ education. The data that will be used in this paper comes from the US General Social Survey from National Opinion Research Center at the University of Chicago. The factor of socio-economics status is measured using the occupation prestige score. It is a measure used in social science research to assess the level of social status or prestige associated with a particular occupation or profession, which were developed by the National Opinion Research Center at the University of Chicago. As part of the GSS, respondents are asked to rate the prestige or social standing of various occupations on a scale of 1 to 90, with higher scores indicating greater prestige. Another variable that has been used is the education level, which is a number of variables to indicate the number of years the respondents have spent in school and college.
+(https://gss.norc.org/Documents/reports/methodological-reports/MR122%20Occupational%20Prestige.pdf) 
+
+*MISSING*briefly discuss the results and application.
+
+
 
 
 # Data {#sec-data}
@@ -81,18 +94,12 @@ summary_df <- as.data.frame(tidy_summary)
 #| fig-width: 8
 #| fig-height: 4
 
-#level_order <- c(NA, "less than high school", "high school", "associate/junior college", "bachelor's", "graduate")
-
 tb1 <- cleaned_data %>% 
   count(degree) %>% 
   mutate(percent=percent(x=n/sum(n))) %>% 
   rename(Degree = degree, Frequency = n, Proportion = percent)
 
-#tb1$Degree <- factor(tb1$Degree, levels = level_order)
 tb1<-tb1%>%arrange(factor(tb1$Degree,c("graduate", "bachelor's", "associate/junior college", "high school", "less than high school", NA)))
-
-  # arrange(Degree) %>% 
-  # mutate(Degree = fct_relevel(Degree, "less than high school", "high school", "associate/junior college", "bachelor's", "graduate", .missing = "NA"))
 
 tb1%>%kable(booktabs = TRUE)
 ```
@@ -190,11 +197,7 @@ ggplot(cleaned_data, aes(x = educ,fill = factor(reg16))) +
 #| echo: false
 #| fig-width: 8
 #| fig-height: 4
-ggplot(cleaned_data, aes(x = maeduc, y = paeduc, color = factor(incom16))) +
-  geom_point() +
-  stat_smooth(method = "loess", se = FALSE) +
-  labs(x = "Mother's Education (in Years)", y = "Father's Education (in Years)", color = "Family Income")+
-  theme_bw()
+
 ```
 
 
@@ -229,8 +232,25 @@ If my paper were 10 pages, then should be be at least 2.5 pages. The discussion 
 ## Third discussion point
 
 ## Weaknesses and next steps
+*problems with prestige score:*
+Subjectivity: Even measures of prestige that attempt to capture objective indicators of social status, such as income or educational attainment, are still subject to subjective interpretation. People's perceptions of what constitutes a high-prestige occupation may vary based on their own cultural, social, or personal biases.
 
-Weaknesses and next steps should also be included.
+Historical and cultural context: Measures of prestige are not fixed over time and may vary across different societies or historical periods. For example, certain occupations that were highly prestigious in the past, such as blacksmith or scribe, may be less highly regarded today.
+
+Heterogeneity within occupations: Different individuals within the same occupation may have different levels of prestige, depending on factors such as their level of experience, education, or specialization.
+
+Overemphasis on certain aspects of occupation: Some measures of prestige may place too much emphasis on certain aspects of occupation, such as income or educational requirements, while overlooking other important factors such as job security, working conditions, or level of autonomy.
+
+Lack of nuance: Prestige scores may provide a broad measure of social status and occupational major groups, but they may not capture the complexity and diversity of occupational experiences, especially for those in lower-prestige occupations.
+(https://www.researchgate.net/publication/236747304_A_Scale_of_Occupational_Prestige_in_Canada_Based_on_NOC_Major_Groups)
+
+*problems with missing data:*
+Reduced statistical power is one such issue, which lowers the likelihood of rejecting the null hypothesis when it is false.
+Missing data can also cause bias in parameter estimation.
+The representativeness of the sample can also be reduced due to missing data.
+The analysis of the study can become more complex when missing data is present.
+These problems can threaten the validity of the trials and lead to invalid conclusions.
+(https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3668100/)
 
 
 \newpage
