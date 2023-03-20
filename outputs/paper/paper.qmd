@@ -30,6 +30,9 @@ library(forcats)
 ```
 
 ```{r,echo=FALSE}
+#| include: false
+#| warning: false
+#| message: false
 cleaned_data <- read_csv(
   file = here("inputs/data/GSS2021 2.csv"))
 ```
@@ -53,15 +56,16 @@ This paper will test and explore how parents’ social-economics status can affe
 
 
 
-
 # Data {#sec-data}
 
 Our data is of penguins (@fig-bills).
 
 ```{r}
-#| label: fig-bills1
-#| fig-cap: Bills of penguins
+#| message: false
 #| echo: false
+#| warning: false
+#| label: tbl-2021-gender
+#| tbl-cap: Linear Model and its Summary Statistics
 
 # Fit the model
 model <- lm(educ ~ mapres10 + papres10 + paeduc + maeduc, data = cleaned_data)
@@ -76,23 +80,21 @@ summary_df <- as.data.frame(tidy_summary)
 # row_names <- c("Intercept", "Mother's Prestiges Score", "Father's Prestiges Score", "Father's Education", "Mother's Education")
 # rownames(summary_df) <- row_names
 
-# # Rename the column names
-# col_names <- c("Term", "Estimate", "Std. Error", "t value", "Pr(>|t|)")
-# colnames(summary_df) <- col_names
-# 
-# # Print the summary table with kableExtra
-# library(kableExtra)
-# kable(summary_df, align = c("l", "r", "r", "r", "r"), 
-#       caption = "Summary of Linear Regression Model",) %>%
-#   kable_styling(bootstrap_options = "striped", full_width = FALSE)
+# Rename the column names
+col_names <- c("Term", "Estimate", "Std. Error", "t value", "Pr(>|t|)")
+colnames(summary_df) <- col_names
 
+# Print the summary table with kableExtra
+library(kableExtra)
+kable(summary_df, align = c("l", "r", "r", "r", "r"),
+      caption = "Summary of Linear Regression Model")
 ```
 ```{r}
-#| label: fig-billssssss0
-#| fig-cap: More bills of penguins
+#| message: false
 #| echo: false
-#| fig-width: 8
-#| fig-height: 4
+#| warning: false
+#| label: tbl-degree
+#| tbl-cap: Respondents' Degree in 2021 Survey
 
 tb1 <- cleaned_data %>% 
   count(degree) %>% 
@@ -101,13 +103,15 @@ tb1 <- cleaned_data %>%
 
 tb1<-tb1%>%arrange(factor(tb1$Degree,c("graduate", "bachelor's", "associate/junior college", "high school", "less than high school", NA)))
 
-tb1%>%kable(booktabs = TRUE)
+tb1%>%kable()
 ```
 
 ```{r}
-#| label: fig-billssssss2
-#| fig-cap: More bills of penguins
+#| label: fig-educ
+#| fig-cap: Histogram of Respondents' Education
 #| echo: false
+#| warning: false
+#| message: false
 #| fig-width: 8
 #| fig-height: 4
 ggplot(data = cleaned_data, aes(x = educ)) +
@@ -122,35 +126,63 @@ ggplot(data = cleaned_data, aes(x = educ)) +
 ```
 
 ```{r}
-#| label: fig-billssssss3
-#| fig-cap: More bills of penguins
+#| message: false
 #| echo: false
+#| warning: false
+#| label: tbl-educationyears
+#| tbl-cap: Number of respondents by gender for 2021 survey
+tb0 <- cleaned_data %>% summarise(Min = min(cleaned_data$educ,na.rm=T),
+                              Median = median(cleaned_data$educ,na.rm=T),
+                              Max = max(cleaned_data$educ,na.rm = T),
+                              Mean = mean(cleaned_data$educ,na.rm=T))
+
+tb0%>%kable()
+```
+
+```{r}
+#| label: fig-parentpre
+#| fig-cap: Mother's and Father's Prestige Score
+#| echo: false
+#| warning: false
+#| message: false
 #| fig-width: 8
 #| fig-height: 4
+# ggplot(cleaned_data, aes(x = mapres10)) +
+#   geom_histogram(aes(y = ..density.., fill = "mapres10"), alpha = 1, binwidth = 2,color = "black") +
+#   geom_histogram(aes(x = papres10, y = ..density.., fill = "paeduc"), alpha = 0.8, binwidth = 2,color = "black") +
+#   scale_fill_manual(values = c("mapres10" = "lightblue", "paeduc" = "darkred"), name = "Variables") +
+#   labs(title = "Mother's and Father's Prestige Score",
+#        x = "Prestige Score",
+#        y = "Density")+
+#   theme_bw()
+
+##edit this
 ggplot(cleaned_data, aes(x = mapres10)) +
-  geom_histogram(aes(y = ..density.., fill = "mapres10"), alpha = 1, binwidth = 2,color = "black") +
-  geom_histogram(aes(x = papres10, y = ..density.., fill = "paeduc"), alpha = 0.4, binwidth = 2,color = "black") +
-  scale_fill_manual(values = c("mapres10" = "lightblue", "paeduc" = "red"), name = "Variables") +
-  labs(title = "Difference between Mother's and Father's Prestige Score",
+  geom_histogram(aes(y = ..density.., fill = "Mother's Prestige Score"), alpha = 1, binwidth = 1, color = "black")+
+  geom_histogram(aes(x = papres10, y = ..density.., fill = "Father's Prestige Score"), alpha = 0.8, binwidth = 1, color = "black") +
+  scale_fill_manual(values = c("Mother's Prestige Score" = "darkgreen", "Father's Prestige Score" = "lightgreen"), name = "Variables") +
+  labs(title = "Mother's and Father's Prestige Score",
        x = "Prestige Score",
-       y = "Density")+
+       y = "Density") +
   theme_bw()
 ```
 
 ```{r}
-#| label: fig-billssssss4
-#| fig-cap: More bills of penguins
+#| label: fig-parentseduc
+#| fig-cap: Mother's Education and Father's Education Level
 #| echo: false
+#| warning: false
+#| message: false
 #| fig-width: 8
 #| fig-height: 4
 ggplot(cleaned_data, aes(x = maeduc)) +
-  geom_histogram(aes(y = ..density.., fill = "maeduc"), alpha = 1, binwidth = 1, color = "black") +
-  geom_histogram(aes(x = paeduc, y = ..density.., fill = "paeduc"), alpha = 0.4, binwidth = 1, color = "black") +
-  scale_fill_manual(values = c("maeduc" = "lightblue", "paeduc" = "red"), name = "Variables") +
-  labs(title = "Differene between Mother's Education and Father's Education",
-       x = "Education (in Years)",
-       y = "Density") +
-  theme_bw()
+geom_histogram(aes(y = ..density.., fill = "Mother's Education"), alpha = 1, binwidth = 0.5, color = "black") +
+geom_histogram(aes(x = paeduc, y = ..density.., fill = "Father's Education"), alpha = 0.8, binwidth = 0.5, color = "black") +
+scale_fill_manual(values = c("Mother's Education" = "darkgreen", "Father's Education" = "lightgreen"), name = "Variables") +
+labs(title = "Mother's Education and Father's Education Level",
+x = "Education (in Years)",
+y = "Density") +
+theme_bw()
 ```
 
 
@@ -159,9 +191,11 @@ Talk more about it.
 Also bills and their average (@fig-billssssss). (You can change the height and width, but don't worry about doing that until you have finished every other aspect of the paper - Quarto will try to make it look nice and the defaults usually work.)
 
 ```{r}
-#| label: fig-billssssss5
-#| fig-cap: More bills of penguins
+#| label: fig-birth
+#| fig-cap: Birthplace of the Respondent \n (if outside of US)
 #| echo: false
+#| warning: false
+#| message: false
 #| fig-width: 8
 #| fig-height: 4
 
@@ -175,9 +209,11 @@ ggplot(cleaned_data, aes(x = educ, fill = factor(born))) +
 ```
 
 ```{r}
-#| label: fig-billssssss6
-#| fig-cap: More bills of penguins
+#| label: fig-region
+#| fig-cap: Respondent's Living Region at Age of 16 v.s. Education
 #| echo: false
+#| warning: false
+#| message: false
 #| fig-width: 8
 #| fig-height: 4
 ggplot(cleaned_data, aes(x = educ,fill = factor(reg16))) +
@@ -192,9 +228,11 @@ ggplot(cleaned_data, aes(x = educ,fill = factor(reg16))) +
 
 
 ```{r}
-#| label: fig-billssssss7
-#| fig-cap: More bills of penguins
+#| label: fig-maincome
+#| fig-cap: Education vs Mother's Education with respect to Family Income
 #| echo: false
+#| warning: false
+#| message: false
 #| fig-width: 8
 #| fig-height: 4
 ggplot(cleaned_data, aes(x = educ, y = maeduc, color = incom16)) +
@@ -204,7 +242,28 @@ ggplot(cleaned_data, aes(x = educ, y = maeduc, color = incom16)) +
   labs(title = "Education vs Mother's Education with respect to Family Income",
        x = "Education (in Years)",
        y = "Mother's Educaion (in Years)",
-       fill = "Family Income \n (at Age of 16)")+
+       color = "Family Income \n (at Age of 16)") +
+  scale_color_discrete(name = "Family Income \n (at Age of 16)") +
+  theme_bw()
+```
+
+```{r}
+#| label: fig-paincome
+#| fig-cap: Education vs Father's Education with respect to Family Income
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-width: 8
+#| fig-height: 4
+ggplot(cleaned_data, aes(x = educ, y = paeduc, color = incom16)) +
+  geom_jitter() +
+  stat_smooth(method = "lm", se = FALSE) +
+  facet_wrap(~incom16)+
+  labs(title = "Education vs Father's Education with respect to Family Income",
+       x = "Education (in Years)",
+       y = "Father's Educaion (in Years)",
+  color = "Family Income \n (at Age of 16)") +
+  scale_color_discrete(name = "Family Income \n (at Age of 16)") +
   theme_bw()
 ```
 
@@ -239,7 +298,7 @@ If my paper were 10 pages, then should be be at least 2.5 pages. The discussion 
 
 ## Third discussion point
 
-## Weaknesses and next steps
+## Weaknesses and next steps {#sec-weaknesses}
 *problems with prestige score:*
 Subjectivity: Even measures of prestige that attempt to capture objective indicators of social status, such as income or educational attainment, are still subject to subjective interpretation. People's perceptions of what constitutes a high-prestige occupation may vary based on their own cultural, social, or personal biases.
 
