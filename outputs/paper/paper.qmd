@@ -197,7 +197,15 @@ ggplot(cleaned_data, aes(x = educ,fill = factor(reg16))) +
 #| echo: false
 #| fig-width: 8
 #| fig-height: 4
-
+ggplot(cleaned_data, aes(x = educ, y = maeduc, color = incom16)) +
+  geom_jitter() +
+  stat_smooth(method = "lm", se = FALSE) +
+  facet_wrap(~incom16)+
+  labs(title = "Education vs Mother's Education with respect to Family Income",
+       x = "Education (in Years)",
+       y = "Mother's Educaion (in Years)",
+       fill = "Family Income \n (at Age of 16)")+
+  theme_bw()
 ```
 
 
