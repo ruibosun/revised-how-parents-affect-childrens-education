@@ -9,7 +9,7 @@ date-format: "12-03-2023"
 abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
 format: pdf
 number-sections: true
-#bibliography: references.bib
+bibliography: references.bib
 ---
 
 ```{r}
@@ -27,6 +27,7 @@ library(scales)
 library(dplyr)
 library(purrr)
 library(forcats)
+library(patchwork)
 ```
 
 ```{r,echo=FALSE}
@@ -60,6 +61,8 @@ This paper will test and explore how parents’ social-economics status can affe
 
 Our data is of penguins (@fig-bills).
 
+# Results
+
 ```{r}
 #| message: false
 #| echo: false
@@ -70,25 +73,34 @@ Our data is of penguins (@fig-bills).
 # Fit the model
 model <- lm(educ ~ mapres10 + papres10 + paeduc + maeduc, data = cleaned_data)
 
-# Get the summary statistics and tidy them up
-tidy_summary <- tidy(summary(model))
-
-# Create a data frame for the tidy summary
-summary_df <- as.data.frame(tidy_summary)
-
-# # Rename the row names
-# row_names <- c("Intercept", "Mother's Prestiges Score", "Father's Prestiges Score", "Father's Education", "Mother's Education")
-# rownames(summary_df) <- row_names
-
-# Rename the column names
-col_names <- c("Term", "Estimate", "Std. Error", "t value", "Pr(>|t|)")
-colnames(summary_df) <- col_names
-
-# Print the summary table with kableExtra
-library(kableExtra)
-kable(summary_df, align = c("l", "r", "r", "r", "r"),
-      caption = "Summary of Linear Regression Model")
+modelsummary::modelsummary(
+  list(
+    "Children's Education" = model
+  ),
+  fmt = 2,
+  statistic = "conf.int"
+)
+# 
+# # Get the summary statistics and tidy them up
+# tidy_summary <- tidy(summary(model))
+# 
+# # Create a data frame for the tidy summary
+# summary_df <- as.data.frame(tidy_summary)
+# 
+# # # Rename the row names
+# # row_names <- c("Intercept", "Mother's Prestiges Score", "Father's Prestiges Score", "Father's Education", "Mother's Education")
+# # rownames(summary_df) <- row_names
+# 
+# # Rename the column names
+# col_names <- c("Term", "Estimate", "Std. Error", "t value", "Pr(>|t|)")
+# colnames(summary_df) <- col_names
+# 
+# # Print the summary table with kableExtra
+# 
+# kable(summary_df, align = c("l", "r", "r", "r", "r"),
+#       caption = "Summary of Linear Regression Model")
 ```
+
 ```{r}
 #| message: false
 #| echo: false
@@ -121,7 +133,7 @@ ggplot(data = cleaned_data, aes(x = educ)) +
   
   # geom_histogram(bins = 15, fill = "lightblue", color = "white") +
   labs(title = "Histogram of Respondents' Education", x = "Education (in Years)", y = "Desensity") +
-   scale_x_continuous(breaks = seq(0, 20, by = 1))+
+  scale_x_continuous(breaks = seq(0, 20, by = 1)) +
   theme_bw()
 ```
 
@@ -136,7 +148,7 @@ tb0 <- cleaned_data %>% summarise(Min = min(cleaned_data$educ,na.rm=T),
                               Max = max(cleaned_data$educ,na.rm = T),
                               Mean = mean(cleaned_data$educ,na.rm=T))
 
-tb0%>%kable()
+tb0 %>% kable()
 ```
 
 ```{r}
@@ -156,7 +168,7 @@ tb0%>%kable()
 #        y = "Density")+
 #   theme_bw()
 
-##edit this
+#prestige score distribution
 ggplot(cleaned_data, aes(x = mapres10)) +
   geom_histogram(aes(y = ..density.., fill = "Mother's Prestige Score"), alpha = 1, binwidth = 1, color = "black")+
   geom_histogram(aes(x = papres10, y = ..density.., fill = "Father's Prestige Score"), alpha = 0.8, binwidth = 1, color = "black") +
@@ -166,6 +178,30 @@ ggplot(cleaned_data, aes(x = mapres10)) +
        y = "Density") +
   theme_bw()
 ```
+
+```{r}
+#| label: fig-presandeduc
+#| fig-cap: Mother's and Father's Prestige Score
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-width: 8
+#| fig-height: 4
+#pres vs. educ
+p1 <- ggplot(cleaned_data, aes(x=educ, y=papres10)) +
+  geom_point(color="#69b3a2", size=2) +
+  ggtitle("Father's Prestige Score vs Children's Education") +
+  labs(x="Education (in Years)", y="Father's Prestige Score")+
+  theme_bw()
+p2 <- ggplot(cleaned_data, aes(x=educ, y=mapres10)) +
+  geom_point(color="darkgreen",size=2) +
+  ggtitle("Mother's Prestige Score vs Children's Education") +
+  labs(x="Education (in Years)", y="Mother's Prestige Score")+
+  theme_bw()
+
+p1 + p2
+```
+
 
 ```{r}
 #| label: fig-parentseduc
@@ -192,7 +228,7 @@ Also bills and their average (@fig-billssssss). (You can change the height and w
 
 ```{r}
 #| label: fig-birth
-#| fig-cap: Birthplace of the Respondent \n (if outside of US)
+#| fig-cap: Birthplace of the Respondent (if outside of US)
 #| echo: false
 #| warning: false
 #| message: false
@@ -204,7 +240,7 @@ ggplot(cleaned_data, aes(x = educ, fill = factor(born))) +
    labs(title = "Education and Birthplace (if outside of US) for the Respondent",
        x = "Education (in Years)",
        y = "Count",
-       fill = "Birthplace of the Respondent \n (if outside of US)")+
+       fill = "Birthplace of the Respondent (if outside of US)")+
   theme_bw()
 ```
 
@@ -218,7 +254,7 @@ ggplot(cleaned_data, aes(x = educ, fill = factor(born))) +
 #| fig-height: 4
 ggplot(cleaned_data, aes(x = educ,fill = factor(reg16))) +
   geom_histogram(binwidth = 2, color = "black") +
-  facet_wrap(~ reg16, ncol = 3)+
+  facet_wrap(~ reg16, ncol = 2)+
   labs(title = "Respondent's Living Region at Age of 16 v.s. Education",
        x = "Education (in Years)",
        y = "Count")+
@@ -242,8 +278,8 @@ ggplot(cleaned_data, aes(x = educ, y = maeduc, color = incom16)) +
   labs(title = "Education vs Mother's Education with respect to Family Income",
        x = "Education (in Years)",
        y = "Mother's Educaion (in Years)",
-       color = "Family Income \n (at Age of 16)") +
-  scale_color_discrete(name = "Family Income \n (at Age of 16)") +
+       color = "Family Income (at Age of 16)") +
+  scale_color_discrete(name = "Family Income (at Age of 16)") +
   theme_bw()
 ```
 
@@ -255,6 +291,7 @@ ggplot(cleaned_data, aes(x = educ, y = maeduc, color = incom16)) +
 #| message: false
 #| fig-width: 8
 #| fig-height: 4
+
 ggplot(cleaned_data, aes(x = educ, y = paeduc, color = incom16)) +
   geom_jitter() +
   stat_smooth(method = "lm", se = FALSE) +
@@ -262,8 +299,8 @@ ggplot(cleaned_data, aes(x = educ, y = paeduc, color = incom16)) +
   labs(title = "Education vs Father's Education with respect to Family Income",
        x = "Education (in Years)",
        y = "Father's Educaion (in Years)",
-  color = "Family Income \n (at Age of 16)") +
-  scale_color_discrete(name = "Family Income \n (at Age of 16)") +
+  color = "Family Income (at Age of 16)") +
+  scale_color_discrete(name = "Family Income (at Age of 16)") +
   theme_bw()
 ```
 
@@ -286,8 +323,6 @@ Here's a dumb example of how to use some references: In paper we run our analysi
 We can use maths by including latex between dollar signs, for instance $\theta$.
 
 
-# Results
-
 # Discussion
 
 ## First discussion point {#sec-first-point}
@@ -300,6 +335,7 @@ If my paper were 10 pages, then should be be at least 2.5 pages. The discussion 
 
 ## Weaknesses and next steps {#sec-weaknesses}
 *problems with prestige score:*
+
 Subjectivity: Even measures of prestige that attempt to capture objective indicators of social status, such as income or educational attainment, are still subject to subjective interpretation. People's perceptions of what constitutes a high-prestige occupation may vary based on their own cultural, social, or personal biases.
 
 Historical and cultural context: Measures of prestige are not fixed over time and may vary across different societies or historical periods. For example, certain occupations that were highly prestigious in the past, such as blacksmith or scribe, may be less highly regarded today.
@@ -312,6 +348,7 @@ Lack of nuance: Prestige scores may provide a broad measure of social status and
 (https://www.researchgate.net/publication/236747304_A_Scale_of_Occupational_Prestige_in_Canada_Based_on_NOC_Major_Groups)
 
 *problems with missing data:*
+
 Reduced statistical power is one such issue, which lowers the likelihood of rejecting the null hypothesis when it is false.
 Missing data can also cause bias in parameter estimation.
 The representativeness of the sample can also be reduced due to missing data.
