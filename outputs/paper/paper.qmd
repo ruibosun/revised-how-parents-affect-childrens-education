@@ -189,12 +189,12 @@ ggplot(cleaned_data, aes(x = mapres10)) +
 #| fig-height: 4
 #pres vs. educ
 p1 <- ggplot(cleaned_data, aes(x=educ, y=papres10)) +
-  geom_point(color="#69b3a2", size=2) +
+  geom_point(color="#69b3a2", size=2,alpha=0.3) +
   ggtitle("Father's Prestige Score vs Children's Education") +
   labs(x="Education (in Years)", y="Father's Prestige Score")+
   theme_bw()
 p2 <- ggplot(cleaned_data, aes(x=educ, y=mapres10)) +
-  geom_point(color="darkgreen",size=2) +
+  geom_point(color="darkgreen",size=2,alpha=0.3) +
   ggtitle("Mother's Prestige Score vs Children's Education") +
   labs(x="Education (in Years)", y="Mother's Prestige Score")+
   theme_bw()
@@ -240,9 +240,15 @@ ggplot(cleaned_data, aes(x = educ, fill = factor(born))) +
    labs(title = "Education and Birthplace (if outside of US) for the Respondent",
        x = "Education (in Years)",
        y = "Count",
-       fill = "Birthplace of the Respondent (if outside of US)")+
+       fill = "Birthplace of the Respondent (if in, of US)")+
   theme_bw()
 ```
+```{r,echo=FALSE}
+tb3 <- cleaned_data %>% 
+  count(born) %>% 
+  mutate(percent=percent(x=n/sum(n)))
+```
+
 
 ```{r}
 #| label: fig-region
@@ -262,6 +268,12 @@ ggplot(cleaned_data, aes(x = educ,fill = factor(reg16))) +
   theme(legend.position = "none")
 ```
 
+```{r,echo=FALSE}
+tb4 <- cleaned_data %>% 
+  count(reg16) %>% 
+  mutate(percent=percent(x=n/sum(n)))
+```
+
 
 ```{r}
 #| label: fig-maincome
@@ -272,7 +284,7 @@ ggplot(cleaned_data, aes(x = educ,fill = factor(reg16))) +
 #| fig-width: 8
 #| fig-height: 4
 ggplot(cleaned_data, aes(x = educ, y = maeduc, color = incom16)) +
-  geom_jitter() +
+  geom_jitter(alpha = 0.2) +
   stat_smooth(method = "lm", se = FALSE) +
   facet_wrap(~incom16)+
   labs(title = "Education vs Mother's Education with respect to Family Income",
@@ -293,7 +305,7 @@ ggplot(cleaned_data, aes(x = educ, y = maeduc, color = incom16)) +
 #| fig-height: 4
 
 ggplot(cleaned_data, aes(x = educ, y = paeduc, color = incom16)) +
-  geom_jitter() +
+  geom_jitter(alpha = 0.2) +
   stat_smooth(method = "lm", se = FALSE) +
   facet_wrap(~incom16)+
   labs(title = "Education vs Father's Education with respect to Family Income",
@@ -310,7 +322,7 @@ Talk way more about it.
 
 
 
-# Model
+# Model {#sec-model}
 
 $$
 Pr(\theta | y) = \frac{Pr(y | \theta) Pr(\theta)}{Pr(y)}
