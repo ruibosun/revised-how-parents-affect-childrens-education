@@ -1,12 +1,11 @@
 ---
-title: "My title"
-subtitle: "My subtitle if needed"
+title: "The Relationship between Family Status and Academic Achievement in Children"
 author: 
   - Ruibo Sun
 thanks: "https://github.com/ruibosun/how-parents-affect-childrens-education"
 date: "`r Sys.time()`"
 date-format: "12-03-2023"
-abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
+abstract: "This paper explores the relationship between family status variables, such as parents' socio-economic status and educational level, and their impact on children's academic achievement and education level using the data from 2021 GSS. Previous studies have suggested that parents' education can positively influence their children's academic performance due to increased access to resources and greater involvement in their education. However, recent research has demonstrated that this relationship is complex and can be influenced by a variety of psychological and sociological factors. The findings suggest that parents' education, family income, and prestige score all have a positive correlation with children's education. Further research is needed to fully understand the complexities of this relationship and use the results to improve educational policies and programs."
 format: pdf
 number-sections: true
 bibliography: references.bib
@@ -24,9 +23,8 @@ library(dplyr)
 library(here)
 library(haven)
 library(scales)
-library(dplyr)
-library(purrr)
-library(forcats)
+#library(purrr)
+#library(forcats)
 library(patchwork)
 ```
 
@@ -67,44 +65,6 @@ Our data is of penguins (@fig-bills).
 #| message: false
 #| echo: false
 #| warning: false
-#| label: tbl-2021-gender
-#| tbl-cap: Linear Model and its Summary Statistics
-
-# Fit the model
-model <- lm(educ ~ mapres10 + papres10 + paeduc + maeduc, data = cleaned_data)
-
-modelsummary::modelsummary(
-  list(
-    "Children's Education" = model
-  ),
-  fmt = 2,
-  statistic = "conf.int"
-)
-# 
-# # Get the summary statistics and tidy them up
-# tidy_summary <- tidy(summary(model))
-# 
-# # Create a data frame for the tidy summary
-# summary_df <- as.data.frame(tidy_summary)
-# 
-# # # Rename the row names
-# # row_names <- c("Intercept", "Mother's Prestiges Score", "Father's Prestiges Score", "Father's Education", "Mother's Education")
-# # rownames(summary_df) <- row_names
-# 
-# # Rename the column names
-# col_names <- c("Term", "Estimate", "Std. Error", "t value", "Pr(>|t|)")
-# colnames(summary_df) <- col_names
-# 
-# # Print the summary table with kableExtra
-# 
-# kable(summary_df, align = c("l", "r", "r", "r", "r"),
-#       caption = "Summary of Linear Regression Model")
-```
-
-```{r}
-#| message: false
-#| echo: false
-#| warning: false
 #| label: tbl-degree
 #| tbl-cap: Respondents' Degree in 2021 Survey
 
@@ -132,7 +92,7 @@ ggplot(data = cleaned_data, aes(x = educ)) +
   geom_density(alpha = .2, fill = "lightblue") +
   
   # geom_histogram(bins = 15, fill = "lightblue", color = "white") +
-  labs(title = "Histogram of Respondents' Education", x = "Education (in Years)", y = "Desensity") +
+  labs(x = "Education (in Years)", y = "Desensity") +
   scale_x_continuous(breaks = seq(0, 20, by = 1)) +
   theme_bw()
 ```
@@ -173,8 +133,7 @@ ggplot(cleaned_data, aes(x = mapres10)) +
   geom_histogram(aes(y = ..density.., fill = "Mother's Prestige Score"), alpha = 1, binwidth = 1, color = "black")+
   geom_histogram(aes(x = papres10, y = ..density.., fill = "Father's Prestige Score"), alpha = 0.8, binwidth = 1, color = "black") +
   scale_fill_manual(values = c("Mother's Prestige Score" = "darkgreen", "Father's Prestige Score" = "lightgreen"), name = "Variables") +
-  labs(title = "Mother's and Father's Prestige Score",
-       x = "Prestige Score",
+  labs(x = "Prestige Score",
        y = "Density") +
   theme_bw()
 ```
@@ -190,12 +149,10 @@ ggplot(cleaned_data, aes(x = mapres10)) +
 #pres vs. educ
 p1 <- ggplot(cleaned_data, aes(x=educ, y=papres10)) +
   geom_point(color="#69b3a2", size=2,alpha=0.3) +
-  ggtitle("Father's Prestige Score vs Children's Education") +
   labs(x="Education (in Years)", y="Father's Prestige Score")+
   theme_bw()
 p2 <- ggplot(cleaned_data, aes(x=educ, y=mapres10)) +
   geom_point(color="darkgreen",size=2,alpha=0.3) +
-  ggtitle("Mother's Prestige Score vs Children's Education") +
   labs(x="Education (in Years)", y="Mother's Prestige Score")+
   theme_bw()
 
@@ -215,8 +172,7 @@ ggplot(cleaned_data, aes(x = maeduc)) +
 geom_histogram(aes(y = ..density.., fill = "Mother's Education"), alpha = 1, binwidth = 0.5, color = "black") +
 geom_histogram(aes(x = paeduc, y = ..density.., fill = "Father's Education"), alpha = 0.8, binwidth = 0.5, color = "black") +
 scale_fill_manual(values = c("Mother's Education" = "darkgreen", "Father's Education" = "lightgreen"), name = "Variables") +
-labs(title = "Mother's Education and Father's Education Level",
-x = "Education (in Years)",
+labs(x = "Education (in Years)",
 y = "Density") +
 theme_bw()
 ```
@@ -237,8 +193,7 @@ Also bills and their average (@fig-billssssss). (You can change the height and w
 
 ggplot(cleaned_data, aes(x = educ, fill = factor(born))) +
   geom_histogram(position = "dodge", binwidth = 1.5, alpha = 0.5, color = "black")+
-   labs(title = "Education and Birthplace (if outside of US) for the Respondent",
-       x = "Education (in Years)",
+   labs(x = "Education (in Years)",
        y = "Count",
        fill = "Birthplace of the Respondent (if in, of US)")+
   theme_bw()
@@ -261,8 +216,7 @@ tb3 <- cleaned_data %>%
 ggplot(cleaned_data, aes(x = educ,fill = factor(reg16))) +
   geom_histogram(binwidth = 2, color = "black") +
   facet_wrap(~ reg16, ncol = 2)+
-  labs(title = "Respondent's Living Region at Age of 16 v.s. Education",
-       x = "Education (in Years)",
+  labs(x = "Education (in Years)",
        y = "Count")+
   theme_bw()+
   theme(legend.position = "none")
@@ -287,8 +241,7 @@ ggplot(cleaned_data, aes(x = educ, y = maeduc, color = incom16)) +
   geom_jitter(alpha = 0.2) +
   stat_smooth(method = "lm", se = FALSE) +
   facet_wrap(~incom16)+
-  labs(title = "Education vs Mother's Education with respect to Family Income",
-       x = "Education (in Years)",
+  labs(x = "Education (in Years)",
        y = "Mother's Educaion (in Years)",
        color = "Family Income (at Age of 16)") +
   scale_color_discrete(name = "Family Income (at Age of 16)") +
@@ -308,14 +261,31 @@ ggplot(cleaned_data, aes(x = educ, y = paeduc, color = incom16)) +
   geom_jitter(alpha = 0.2) +
   stat_smooth(method = "lm", se = FALSE) +
   facet_wrap(~incom16)+
-  labs(title = "Education vs Father's Education with respect to Family Income",
-       x = "Education (in Years)",
+  labs(x = "Education (in Years)",
        y = "Father's Educaion (in Years)",
   color = "Family Income (at Age of 16)") +
   scale_color_discrete(name = "Family Income (at Age of 16)") +
   theme_bw()
 ```
 
+```{r}
+#| message: false
+#| echo: false
+#| warning: false
+#| label: tbl-lmeduc
+#| tbl-cap: Linear Model and its Summary Statistics
+
+# Fit the model
+model <- lm(educ ~ mapres10 + papres10 + paeduc + maeduc, data = cleaned_data)
+
+modelsummary::modelsummary(
+  list(
+    "Children's Education" = model
+  ),
+  fmt = 2,
+  statistic = "conf.int"
+)
+```
 
 
 Talk way more about it. 
@@ -373,5 +343,6 @@ These problems can threaten the validity of the trials and lead to invalid concl
 
 
 # References
+
 
 
