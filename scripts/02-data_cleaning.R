@@ -62,7 +62,5 @@ raw_data <- raw_data %>%
 cleaned_data<-raw_data
 
 #### Save data ####
-# [...UPDATE THIS...]
-# change cleaned_data to whatever name you end up with at the end of cleaning
-write_csv(cleaned_data, "inputs/data/GSS2021 2.csv")
+write_csv(cleaned_data, "inputs/data/GSS2021.csv")
 

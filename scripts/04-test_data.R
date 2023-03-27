@@ -11,7 +11,7 @@
 #### Workspace setup ####
 library(tidyverse)
 cleaned_data <- read_csv(
-  file = here("inputs/data/GSS2021 2.csv"))
+  file = here("inputs/data/GSS2021.csv"))
 
 #### Test data ####
 cleaned_data$mapres10|> class() == "numeric"
@@ -45,3 +45,6 @@ cleaned_data$maeduc|> min(na.rm = T) >= 0
 cleaned_data$paeduc|>min(na.rm = T) >= 0
 
 cleaned_data$educ|>min(na.rm = T) >= 0
+
+#check none of the row was removed
+nrow(cleaned_data) == nrow(raw_data)
