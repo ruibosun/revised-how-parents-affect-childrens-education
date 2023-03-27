@@ -1,10 +1,8 @@
-# Starter folder
+# How Parents may affect Childrens' education
 
 ## Overview
 
-This repo provides students with a foundation for their own projects associated with *Telling Stories with Data*. You do not need every aspect for every paper and you should delete aspects that you do not need.
-
-To use this folder, click the green "Code" button", then "Download ZIP". Move the downloaded folder to where you want to work on your own computer, and then modify it to suit.
+This paper explores the relationship between family status variables, such as parents' socio-economic status and educational level, and their impact on children's academic achievement and education level using the data from 2021 GSS. Previous studies have suggested that parents' education can positively influence their children's academic performance due to increased access to resources and greater involvement in their education. However, recent research has demonstrated that this relationship is complex and can be influenced by a variety of psychological and sociological factors. The findings suggest that parents' education, family income, and prestige score all have a positive correlation with children's education. Further research is needed to fully understand the complexities of this relationship and use the results to improve educational policies and programs.
 
 ## File Structure
 
