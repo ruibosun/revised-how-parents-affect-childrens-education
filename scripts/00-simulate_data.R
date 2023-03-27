@@ -1,10 +1,10 @@
 #### Preamble ####
-# Purpose: Data cleaning for GSS 2021
+# Purpose: Data Simulation for the paper of "The Relationship between Family Status and Academic Achievement in Children"
 # Author: Ruibo Sun
-# Data: 16 March 2023
+# Date: 16 March 2023
 # Contact: ruibo.sun@mail.utoronto.ca
 # License: MIT
-# Pre-requisites: Download all the packges under the Workspace section
+# Pre-requisites: Download package of tidyverse under the Workspace section
 # Any other information needed? None
 
 

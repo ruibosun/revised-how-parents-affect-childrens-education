@@ -1,7 +1,7 @@
 #### Preamble ####
 # Purpose: Data cleaning for GSS 2021
 # Author: Ruibo Sun
-# Data: 16 March 2023
+# Date: 16 March 2023
 # Contact: ruibo.sun@mail.utoronto.ca
 # License: MIT
 # Pre-requisites: Download all the packges under the Workspace section
@@ -14,10 +14,7 @@ library(tidyverse)
 library(dplyr)
 
 #### Clean data ####
-raw_data <- read_dta("inputs/data/GSS2021.dta")
-
-raw_data <-
-  labelled::to_factor(raw_data)
+raw_data <- read_csv("inputs/data/raw_data.csv")
 
 raw_data <- 
   raw_data %>% 
@@ -62,5 +59,5 @@ raw_data <- raw_data %>%
 cleaned_data<-raw_data
 
 #### Save data ####
-write_csv(cleaned_data, "inputs/data/GSS2021.csv")
+write_csv(cleaned_data, "inputs/data/cleaned_GSS2021.csv")
 
