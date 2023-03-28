@@ -1,5 +1,5 @@
 ---
-title: "The Relationship between Family Status and Academic Achievement in Children in U.S. from 2021"
+title: "The Relationship between Family Status and Academic Achievement in Children in US from 2021"
 author: 
   - Ruibo Sun
 thanks: "https://github.com/ruibosun/how-parents-affect-childrens-education"
@@ -82,7 +82,7 @@ The level of “no formal schooling” in **maeduc**, **paeduc** and **educ** is
 None of the missing values (NA) is removed in this paper. The reason is that removing the missing values in every column would result in a huge loss in the dataset. To maintain the representativeness of the data, missing values are automatically filtered by R, rather than removed manually. The possible limitation and effect of the missing values will be discussed in the @sec-weakness.
 
 
-# Results
+# Results {#sec-result}
 
 ```{r}
 #| message: false
@@ -342,34 +342,54 @@ This suggests that fathers' educational background may have a particularly stron
 
 # Discussion
 
-## First discussion point {#sec-first-point}
+## Average years of schooling in the US and Outside of US
+Education has been a crucial driver of social and economic progress worldwide, and its expansion over the past two centuries has been a significant phenomenon. The global average year of schooling currently stands at around 8.7 years, according to data from World Economics [@world_economics].
+In this paper, by examining the average year of schooling in the United States, based on 2021 GSS data, it was found that the average year of schooling is 14 in @tbl-educ. This result is consistent with the findings from Our World in Data, which indicate that the average year of schooling in the US is also 14 years [@global_education].
 
-If my paper were 10 pages, then should be be at least 2.5 pages. The discussion is a chance to show off what you know and what you learnt from all this. 
+Furthermore, the data in @tbl-degree reveals that a bachelor's degree and a graduate degree are the second and third most common educational categories in the US, respectively. This finding suggests that having an associate or junior college degree is less common compared to the bachelor's or graduate degree. Conversely, a smaller proportion of individuals have less than a high school education.
 
-## Second discussion point
+The Organisation for Economic Co-operation and Development (OECD) reports that the US is among the most well-educated countries globally, with 42% of 25-64 year-olds holding tertiary attainment, behind only Canada, Israel, Japan, and the Russian Federation [@glance]. However, the US ranks 14th out of 37 OECD and G20 countries in the percentage of 25-34 year-olds with higher education, with 42% - above the OECD average but significantly behind Korea, which is the leader with 65%.
 
-## Third discussion point
+This data on education levels is not only important for understanding social and economic trends in the US, but it also has implications for policymaking and decision-making related to education. By accurately understanding the educational distribution of a given population, policymakers can make informed decisions about how to allocate resources and develop policies that address the needs and opportunities of different groups.
+
+## The impact of parental education level
+In the @sec-result, the @fig-parentseduc, @fig-paincome and @fig-maincome, they all show that there is a postive correlation between the education levels of mothers and fathers. If one parent has a high level of education, it is likely that the other parent also has a high level of education.
+
+The correlation between parents' education levels and their children's educational outcomes is well-established in the literature. Studies have consistently shown that parents' education is one of the strongest predictors of their children's academic achievement and educational attainment [@hout].  The study by  [@chetty] used data from tax records and college enrollment records to analyse the relationship between parents' income, education, and social status, and their children's earnings and educational outcomes. The results showed that children from high-income families were more likely to attend college and earn higher incomes than children from low-income families. In addition, the study found that parental education was a key factor in determining children's educational and economic outcomes. Children with highly educated parents were more likely to attend college and earn higher incomes than children with less educated parents.
+
+Furthermore, the analysis of the statistical model from the @tbl-lmeduc shows that parental education and prestige scores are positively correlated with their children's academic achievement and societal status. The coefficients for the independent variables father’s and mother’s education in years indicate that an increase in fathers' education has a greater association with their children's education than that of mothers. This suggests that the father's role in education and investment in their children's future may be particularly important. However, the influence of both parents is still significant. The R-squared value suggests that the independent variables explain only a small portion of the variation in the dependent variable, indicating that other factors beyond parental education and prestige score also play a role. Nonetheless, these findings highlight the importance of parental involvement in their children's education, with a particular emphasis on the role of fathers.
+
+The relationship between parental education and student achievement has been the focus of many studies, with varying results. Some study has found that maternal educational attainment had an impact on student achievement, which contradicts the finding in this paper [@1993]. The present study showed that paternal support of education has a significant impact on academic achievement, while maternal education level did not show a significant impact. However, the study of @2000 showed that families with active fathers fostered maternal involvement in the household, which resulted in a support system that fosters educational attainment and positive long-term contributions.
+
+Despite these discrepancies, the findings in this paper concur with prior literature that emphasizes the importance of parental education levels and their impact on college student achievement [@ortiz]. This study focuses on showing that the fathers' education level has a significant relationship with childrens’ year of schooling, while no statistically significant relationship was observed with the mothers' education level.
+
+These findings highlight the importance of parental involvement and support in their children's education, with a particular emphasis on the role of fathers. The results suggest that fathers' education levels may have a stronger impact on their children's academic achievement than that of mothers. However, it is important to note that other factors, such as family income and race, may also play a role in student achievement. Therefore, further research is necessary to fully understand the complex relationship between these variables and their impact on academic achievement, which will be carefully discussed in @sec-weakness.
+
 
 ## Weaknesses and next steps {#sec-weakness}
 
+### Weaknesses and Limitations
 As with any research, this study has its limitations and weaknesses. One significant weakness is the use of prestige scores as a variable to measure social status and occupational standing. While attempts were made to capture objective indicators of status, such as income and education, prestige scores are still subject to subjective interpretation. Cultural, social, or personal biases may influence people's perceptions of what constitutes a high-prestige occupation. Furthermore, measures of prestige are not fixed over time and may vary across different societies and historical periods. Heterogeneity within occupations can also lead to different levels of prestige among individuals. Additionally, some measures of prestige may overemphasize certain aspects of an occupation, such as income or education, while overlooking other critical factors like job security or working conditions [@prestige].
 
 Another weakness of this study is missing data. While the decision to retain all missing values was made intentionally to avoid issues with representativeness, missing data can still affect the statistical power and accuracy of estimates. It can also reduce the representativeness of the sample, potentially limiting the generalizability of the findings. Additionally, missing data can make the analysis of the study more complex, requiring more sophisticated techniques that may increase the risk of errors [@kang].
 
 Moreover, this study did not use hypothesis testing, which could potentially overlook some effects that might be present in the data. Therefore, the generalizability of the findings should be interpreted with caution. Future studies should aim to address these limitations and weaknesses to ensure more accurate and comprehensive research on the topic.
 
+### Next Steps
 To shed light in future studies, there are some potential improvements. Firstly, it may be beneficial to incorporate additional measurements for social-economic statuses, such as the International Socio-Economic Index of Occupational Status (ISEI). This index is derived from the International Standard Classification of Occupations (ISCO) and comprises comparably coded data on education, occupation, and income from 73,901 full-time employed workers across 16 countries [@international].
 
 Furthermore, new and accurate methodologies could be implemented for data analysis. It is evident that the sample sizes across the groups in @fig-birth are substantially different. Therefore, post-stratification may be a suitable technique to adjust for these discrepancies and verify the results. Moreover, in terms of the statistical model used in the study, a simple linear model was employed with only a few predictors. Future studies could build a more sophisticated model that accounts for potential interaction or quartic terms in the analysis to improve the understanding of the relationship under investigation. 
 
 In @fig-region, the results seem to be insignificant. One way to improve is to consider the measurement of the neighbourhood using living regions at age 16 may not provide a comprehensive representation of the impact of the neighbourhood on education. Other factors, such as the quality of schools and access to resources, may also play a significant role in educational outcomes but are not captured by this measure. Therefore, it is possible that the relationship between neighbourhood and education is more complex than what can be inferred from the living region at age 16 alone. While the distribution of education levels among neighbourhoods may appear similar based on @fig-region, it is still possible that there are significant differences in educational outcomes that are not apparent in the bimodal shape of the distribution. Further research using more detailed measures of neighbourhood characteristics and educational outcomes could provide a more nuanced understanding of the relationship between neighbourhood and education.
 
-While this data and study provide valuable insights into children's education and performance, it is important to acknowledge that some key factors have not been included. One such variable is the positive involvement of parents in their children's education. Research has consistently shown that parental involvement can have a significant impact on children's academic success, yet this aspect was not measured in the 2021 GSS [@parentinvolvement]. Therefore, it is essential to include these factors in future studies to fully understand the complex interplay between different variables and their effects on children's education. By including factors like parental involvement, future studies could provide a more comprehensive understanding of the various factors that influence children's education and help to identify effective strategies for improving educational outcomes.
+While this data and study provide valuable insights into children's education and performance, it is important to acknowledge that some key factors have not been included. One such variable is the positive involvement of parents in their children's education. Research has consistently shown that parental involvement can have a significant impact on children's academic success, yet this aspect was not measured in the 2021 GSS [@parentinvolvement]. Therefore, it is essential to include these factors in future studies to fully understand the complex interplay between different variables and their effects on children's education. By including factors like parental involvement, future studies could provide a more comprehensive understanding of the various factors that influence children's education and help to identify effective strategies for improving educational outcomes. 
+
+Lastly, the study's data was limited to individuals who responded to the 2021 GSS survey in the US, which may not be representative of the entire population. Respondents who chose to participate in the survey may have different characteristics than non-respondents, which could affect the generalizability of the study's findings to the wider population.
 
 # Appendix
 
 ## Link to the Survey
-Please view the survey by this link [link](https://forms.office.com/Pages/ResponsePage.aspx?id=JsKqeAMvTUuQN7RtVsVSEIL6CTEUDb9LuJG06wrhLr9UMTNRNUNFS0tFT0hVTVM4UVFXWDdINFY5Sy4u).
+Please view the survey by this [link](https://forms.office.com/Pages/ResponsePage.aspx?id=JsKqeAMvTUuQN7RtVsVSEIL6CTEUDb9LuJG06wrhLr9UMTNRNUNFS0tFT0hVTVM4UVFXWDdINFY5Sy4u).
 
 ## Supplementary Survey
 1.What is your gender? 
