@@ -1,10 +1,10 @@
 ---
-title: "The Relationship between Family Status and Academic Achievement in Children"
+title: "The Relationship between Family Status and Academic Achievement in Children in U.S. from 2021"
 author: 
   - Ruibo Sun
 thanks: "https://github.com/ruibosun/how-parents-affect-childrens-education"
 date: "`r Sys.time()`"
-date-format: "12-03-2023"
+date-format: "D MMMM YYYY"
 abstract: "This paper explores the relationship between family status variables, such as parents' socio-economic status and educational level, and their impact on children's academic achievement and education level using the data from 2021 GSS. Previous studies have suggested that parents' education can positively influence their children's academic performance due to increased access to resources and greater involvement in their education. However, recent research has demonstrated that this relationship is complex and can be influenced by a variety of psychological and sociological factors. The findings suggest that parents' education, family income, and prestige score all have a positive correlation with children's education. Further research is needed to fully understand the complexities of this relationship and use the results to improve educational policies and programs."
 format: pdf
 number-sections: true
@@ -33,7 +33,7 @@ library(patchwork)
 #| warning: false
 #| message: false
 cleaned_data <- read_csv(
-  file = here("inputs/data/GSS2021 2.csv"))
+  file = here("inputs/data/GSS2021.csv"))
 ```
 
 
@@ -365,6 +365,122 @@ Furthermore, new and accurate methodologies could be implemented for data analys
 In @fig-region, the results seem to be insignificant. One way to improve is to consider the measurement of the neighbourhood using living regions at age 16 may not provide a comprehensive representation of the impact of the neighbourhood on education. Other factors, such as the quality of schools and access to resources, may also play a significant role in educational outcomes but are not captured by this measure. Therefore, it is possible that the relationship between neighbourhood and education is more complex than what can be inferred from the living region at age 16 alone. While the distribution of education levels among neighbourhoods may appear similar based on @fig-region, it is still possible that there are significant differences in educational outcomes that are not apparent in the bimodal shape of the distribution. Further research using more detailed measures of neighbourhood characteristics and educational outcomes could provide a more nuanced understanding of the relationship between neighbourhood and education.
 
 While this data and study provide valuable insights into children's education and performance, it is important to acknowledge that some key factors have not been included. One such variable is the positive involvement of parents in their children's education. Research has consistently shown that parental involvement can have a significant impact on children's academic success, yet this aspect was not measured in the 2021 GSS [@parentinvolvement]. Therefore, it is essential to include these factors in future studies to fully understand the complex interplay between different variables and their effects on children's education. By including factors like parental involvement, future studies could provide a more comprehensive understanding of the various factors that influence children's education and help to identify effective strategies for improving educational outcomes.
+
+# Appendix
+
+## Link to the Survey
+Please view the survey by this link [link](https://forms.office.com/Pages/ResponsePage.aspx?id=JsKqeAMvTUuQN7RtVsVSEIL6CTEUDb9LuJG06wrhLr9UMTNRNUNFS0tFT0hVTVM4UVFXWDdINFY5Sy4u).
+
+## Supplementary Survey
+1.What is your gender? 
+
+- Male
+- Female
+- Non-binary
+- Woman
+- Man
+- Prefer not to say
+
+2.What is your race? 
+
+- White
+- Black or African American
+- Hispanic or Latino
+- Asian
+- Native American or Alaska Native
+- Native Hawaiian or other Pacific Islander
+- Other
+
+3.Do you consider yourself as an immigrant?
+
+- Yes
+- No
+- Maybe
+
+4.US citizen
+
+- Yes
+- No
+
+5.What is the highest level of education you have achieved?
+
+- Less than high school
+- High school diploma or equivalent
+- Some college or associate degree
+- Bachelor's degree
+- Graduate degree or higher
+
+6.What type of school did you attend in your teenage?
+
+- Public school
+- Private school
+- Homeschool
+- Other
+
+7.High school GPA (if applicable)
+
+8.College/University GPA (if applicable)
+
+9.What is the highest level of education achieved by your mother and father?
+
+- Less than high school
+- High school diploma or equivalent
+- Some college or associate degree
+- Bachelor's degree
+- Graduate degree or higher
+
+10.What was your parents' occupation in your teenage?
+
+- Professional/managerial
+- Technical/sales
+- Administrative/clerical
+- Blue collar/other manual
+- Other
+
+11.What is the highest level of education completed by your mother? 
+
+- Less than high school
+- High school graduate
+- Some college or technical school
+- Bachelor's degree
+- Graduate degree (Master's or Doctorate)
+
+12.What is the highest level of education completed by your father? 
+
+- Less than high school
+- High school graduate
+- Some college or technical school
+- Bachelor's degree
+- Graduate degree (Master's or Doctorate)
+
+13.How involved are your parents in your education?
+
+- Not involved
+- Somewhat involved
+- Moderately involved
+- Highly involved
+
+14.What is your family's income level in your teenage?
+
+- Far above average
+- Above average
+- Average
+- Below average
+- Far below average
+
+15.Where did you live in your teenage years?
+
+- Rural area
+- Suburban area
+- Urban area
+
+16.How much pressure do you feel from your parents to excel academically? 
+
+- None
+- A little
+- Moderate
+- High
+- Very high
 
 
 \newpage
