@@ -1,7 +1,7 @@
 #### Preamble ####
 # Purpose: Data cleaning for GSS 2021
 # Author: Ruibo Sun
-# Data: 16 March 2023
+# Date: 16 March 2023
 # Contact: ruibo.sun@mail.utoronto.ca
 # License: MIT
 # Pre-requisites: Download all the packges under the Workspace section
