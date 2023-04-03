@@ -5,7 +5,7 @@ author:
 thanks: "https://github.com/ruibosun/how-parents-affect-childrens-education"
 date: "`r Sys.time()`"
 date-format: "D MMMM YYYY"
-abstract: "This paper explores the relationship between family status variables, such as parents' socio-economic status and educational level, and their impact on children's academic achievement and education level using the data from 2021 GSS. Previous studies have suggested that parents' education can positively influence their children's academic performance due to increased access to resources and greater involvement in their education. However, recent research has demonstrated that this relationship is complex and can be influenced by a variety of psychological and sociological factors. The findings suggest that parents' education, family income, and prestige score all have a positive correlation with children's education. Further research is needed to fully understand the complexities of this relationship and use the results to improve educational policies and programs."
+abstract: "This paper explores the relationship between family status variables, such as parents' socio-economic status and educational level, and their impact on children's academic achievement and education level using the data from 2021 General Social Survey (GSS). Previous studies have suggested that parents' education can positively influence their children's academic performance due to increased access to resources and greater involvement in their education. However, recent research has demonstrated that this relationship is complex and can be influenced by a variety of psychological and sociological factors. The findings suggest that parents' education, family income, and prestige score all have a positive correlation with children's education. Further research is needed to fully understand the complexities of this relationship and use the results to improve educational policies and programs."
 format: pdf
 number-sections: true
 bibliography: references.bib
@@ -39,7 +39,7 @@ cleaned_data <- read_csv(
 
 # Introduction
 
-In the past, family status variables, such as the socio-economic status and educational level of parents, were commonly considered as strong predictors of academic achievement in children. More specifically, parents who have lower levels of education, and those with higher levels of education are more inclined to view higher education as desirable and encourage their children to excel academically. They also tend to hold higher expectations for their children's academic performance [@davis_2014].
+In the past, family status variables, such as the socio-economic status and educational level of parents, were commonly considered as strong predictors of academic achievement in children. More specifically, parents who have lower levels of education, and those with higher levels of education are more inclined to view higher education as desirable and encourage their children to excel academically. They also tend to hold higher expectations for their children's academic performance [@davis_2014]. Ultimately, these may affect the education level of the children.
 
 One potential explanation for this relationship is that higher levels of education can provide parents with access to resources such as income, time, energy, and community contacts, which can enable greater involvement in a child's education. As a result, the influence of family status variables on children's academic achievement may be best understood as a complex interaction between status and process variables [@khan].
 
@@ -84,6 +84,8 @@ None of the missing values (NA) is removed in this paper. The reason is that rem
 
 # Results {#sec-result}
 
+This following findings are from the 2021 General Social Survey (GSS) data. 
+
 ```{r}
 #| message: false
 #| echo: false
@@ -112,11 +114,11 @@ ggplot(data = cleaned_data, aes(x = educ)) +
   geom_density(alpha = .2, fill = "lightblue") +
   
   # geom_histogram(bins = 15, fill = "lightblue", color = "white") +
-  labs(x = "Education (in Years)", y = "Desensity") +
+  labs(x = "Education (in Years)", y = "Density") +
   scale_x_continuous(breaks = seq(0, 20, by = 1)) +
   theme_bw()
 ```
-The second variable utilized to quantify education is relation to the number of years of schooling. In @fig-educ, this histogram shows an overall distribution of the respondents' education in years. It is clear that the distribution is right-skewed, which indicates that there are more respondents with lower levels of education than with higher levels of education. In other words, the bulk of the respondents are clustered towards the left side of the histogram (lower levels of education), and there are relatively fewer respondents towards the right side of the histogram (higher levels of education). In short, the majority of respondents in 2021 GSS are highly educated. 
+The second variable utilized to quantify education is relation to the number of years of schooling. In @fig-educ, this histogram shows an overall distribution of the respondents' education in years. It is clear that the distribution is right-skewed, which indicates that there are more respondents with higher levels of education. In other words, the bulk of the respondents are clustered towards the left side of the histogram (lower levels of education), and there are relatively fewer respondents towards the right side of the histogram (higher levels of education). In short, the majority of respondents in 2021 GSS are highly educated. 
 
 
 
@@ -270,7 +272,7 @@ ggplot(cleaned_data, aes(x = educ, y = maeduc, color = incom16)) +
   stat_smooth(method = "lm", se = FALSE) +
   facet_wrap(~incom16)+
   labs(x = "Education (in Years)",
-       y = "Mother's Educaion (in Years)",
+         y = "Mother's Education (in Years)",
        color = "Family Income (at Age of 16)") +
   scale_color_discrete(name = "Family Income (at Age of 16)") +
   theme_bw()
@@ -292,7 +294,7 @@ ggplot(cleaned_data, aes(x = educ, y = paeduc, color = incom16)) +
   stat_smooth(method = "lm", se = FALSE) +
   facet_wrap(~incom16)+
   labs(x = "Education (in Years)",
-       y = "Father's Educaion (in Years)",
+       y = "Father's Education (in Years)",
   color = "Family Income (at Age of 16)") +
   scale_color_discrete(name = "Family Income (at Age of 16)") +
   theme_bw()
