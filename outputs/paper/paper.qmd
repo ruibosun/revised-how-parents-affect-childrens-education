@@ -1,8 +1,8 @@
 ---
-title: "The Relationship between Family Status and Academic Achievement in Children in US from 2021"
+title: "Exploring the Link Between Family Background and Children's Academic Achievement in the United States (2021)"
 author: 
   - Ruibo Sun
-thanks: "https://github.com/ruibosun/how-parents-affect-childrens-education"
+thanks: "Code and Data: https://github.com/ruibosun/revised-how-parents-affect-childrens-education"
 date: "`r Sys.time()`"
 date-format: "D MMMM YYYY"
 abstract: "This paper explores the relationship between family status variables, such as parents' socio-economic status and educational level, and their impact on children's academic achievement and education level using the data from 2021 General Social Survey (GSS). Previous studies have suggested that parents' education can positively influence their children's academic performance due to increased access to resources and greater involvement in their education. However, recent research has demonstrated that this relationship is complex and can be influenced by a variety of psychological and sociological factors. The findings suggest that parents' education, family income, and prestige score all have a positive correlation with children's education. Further research is needed to fully understand the complexities of this relationship and use the results to improve educational policies and programs."
@@ -33,7 +33,7 @@ library(patchwork)
 #| warning: false
 #| message: false
 cleaned_data <- read_csv(
-  file = here("inputs/data/GSS2021.csv"))
+  file = here("inputs/data/cleaned_GSS2021.csv"))
 ```
 
 
@@ -44,6 +44,9 @@ In the past, family status variables, such as the socio-economic status and educ
 One potential explanation for this relationship is that higher levels of education can provide parents with access to resources such as income, time, energy, and community contacts, which can enable greater involvement in a child's education. As a result, the influence of family status variables on children's academic achievement may be best understood as a complex interaction between status and process variables [@khan].
 
 However, recent research has indicated that the relationship between these factors and academic achievement is not always direct. Instead, socio-economic status and parents' education are part of a larger set of psychological and sociological variables that can impact children's educational outcomes [@khan].
+
+In my previous paper, there are several findings. The average years of schooling in the US is 14, which is higher than the global average of 8.7 years. A bachelor's degree and a graduate degree are more common than an associate or junior college degree, and the US ranks behind several countries in terms of higher education attainment for 25-34 year-olds. Parental education levels have a positive correlation, and there is a strong link between parents' education levels and their children's academic achievement and societal status. Fathers' education levels appear to have a stronger impact than mothers' on children's academic achievement, but other factors may also play a role. Further research is needed to fully understand the relationship between these variables. Policymakers can use this information to make informed decisions about resource allocation and policy
+development. Here is a [link](https://github.com/ruibosun/how-parents-affect-childrens-education/blob/main/outputs/paper/paper.pdf) to view the entire paper.However, the prior study did not appropriately handle the issue of missing values (NAs). Consequently, this new paper aims to conduct a more rigorous analysis by appropriately addressing the NAs. Moreover, it will address the limitations of the previous study to produce more accurate and representative results.
 
 In short, the findings in this paper demonstrate that parents’ education has a positive correlation with children’s education. Additionally, the region of living during the teenage years can also impact children’s education. Parents’ prestige score seems to be another factor in children’s education. However, there is some limitation on the definition of prestige score that may influence the overall results. This will be discussed in the @sec-weakness.
 
@@ -69,8 +72,6 @@ For simplicity purposes, only variables that are closely related to the topics a
 - **paeduc**: A numeric variable indicating the number of years of education completed by the respondent's father.
 - **maeduc**: A numeric variable indicating the number of years of education completed by the respondent's mother.
 - **educ**: A numeric variable indicating the number of years of education completed by the respondent.
-- **mawrkslf**: A categorical variable indicating whether the respondent's mother was employed for wages or salary.
-- **pawrkslf**: A categorical variable indicating whether the respondent's father was employed for wages or salary.
 - **degree**: A categorical variable indicating the highest degree earned by the respondent.
 - **born**: A categorical variable indicating the region of the US where the respondent was born.
 - **sex**: A categorical variable indicating the respondent's sex.
@@ -82,7 +83,7 @@ The level of “no formal schooling” in **maeduc**, **paeduc** and **educ** is
 None of the missing values (NA) is removed in this paper. The reason is that removing the missing values in every column would result in a huge loss in the dataset. To maintain the representativeness of the data, missing values are automatically filtered by R, rather than removed manually. The possible limitation and effect of the missing values will be discussed in the @sec-weakness.
 
 
-# Results {#sec-result}
+# Results* {#sec-result}
 
 This following findings are from the 2021 General Social Survey (GSS) data. 
 
@@ -301,7 +302,7 @@ ggplot(cleaned_data, aes(x = educ, y = paeduc, color = incom16)) +
 ```
 In @fig-paincome, the income groups are the same as before. However, the plot is now examining the correlation between the father’s education and the children’s education. Once again, there is a positive correlation between the education level of fathers and their children's education, regardless of family income. However, for respondents who reported a "far above average" family income, the relationship between the father's education and children's education appears to be stronger than for other income groups. This suggests that higher family income may be associated with a more pronounced link between paternal and children's education levels. Comparing the two plots, the slopes in @fig-paincome for all income groups are much steeper than the slopes in @fig-maincome. This may suggest that there is a stronger relationship between fathers' education and children's education compared to mothers' education and children's education given the same income level.
 
-# Model {#sec-model}
+# Model* {#sec-model}
 
 $$
 \hat{Y}=\hat{\beta_0}+\hat{\beta_1}X_{mapres10}+\hat{\beta_2}X_{papres10}+\hat{\beta_3}X_{paeduc}+\hat{\beta_4}X_{maeduc}
@@ -315,7 +316,7 @@ $$ {#eq-model}
 #| tbl-cap: Linear Model and its Summary Statistics
 
 # Fit the model
-model <- lm(educ ~ mapres10 + papres10 + paeduc + maeduc, data = cleaned_data)
+model <- lm(educ ~ mapres10 + papres10 + exp(paeduc) + exp(maeduc), data = cleaned_data)
 
 modelsummary::modelsummary(
   list(
@@ -342,7 +343,7 @@ To put it another way, there exists a positive correlation between the education
 This suggests that fathers' educational background may have a particularly strong influence on their children's academic achievement and future opportunities. While the influence of mothers' education and social status is still significant, the impact of fathers' education appears to be even greater in shaping their children's educational outcomes. These findings highlight the importance of parental involvement and investment in their children's education, particularly that of the father's role in this regard.
 
 
-# Discussion
+# Discussion*
 
 ## Average years of schooling in the US and Outside of US
 Education has been a crucial driver of social and economic progress worldwide, and its expansion over the past two centuries has been a significant phenomenon. The global average year of schooling currently stands at around 8.7 years, according to data from World Economics [@world_economics].
@@ -368,7 +369,7 @@ Despite these discrepancies, the findings in this paper concur with prior litera
 These findings highlight the importance of parental involvement and support in their children's education, with a particular emphasis on the role of fathers. The results suggest that fathers' education levels may have a stronger impact on their children's academic achievement than that of mothers. However, it is important to note that other factors, such as family income and race, may also play a role in student achievement. Therefore, further research is necessary to fully understand the complex relationship between these variables and their impact on academic achievement, which will be carefully discussed in @sec-weakness.
 
 
-## Weaknesses and next steps {#sec-weakness}
+## Weaknesses and next steps* {#sec-weakness}
 
 ### Weaknesses and Limitations
 As with any research, this study has its limitations and weaknesses. One significant weakness is the use of prestige scores as a variable to measure social status and occupational standing. While attempts were made to capture objective indicators of status, such as income and education, prestige scores are still subject to subjective interpretation. Cultural, social, or personal biases may influence people's perceptions of what constitutes a high-prestige occupation. Furthermore, measures of prestige are not fixed over time and may vary across different societies and historical periods. Heterogeneity within occupations can also lead to different levels of prestige among individuals. Additionally, some measures of prestige may overemphasize certain aspects of an occupation, such as income or education, while overlooking other critical factors like job security or working conditions [@prestige].

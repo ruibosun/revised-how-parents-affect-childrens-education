@@ -46,5 +46,5 @@ cleaned_data$paeduc|>min(na.rm = T) >= 0
 
 cleaned_data$educ|>min(na.rm = T) >= 0
 
-#check none of the row was removed
-nrow(cleaned_data) == nrow(raw_data)
+# check the NAs that are numerical are gone
+apply(X = is.na(cleaned_data), MARGIN = 2, FUN = sum)==c(rep(0,9))
