@@ -1,10 +1,10 @@
 #### Preamble ####
 # Purpose: Data Simulation for the paper of "The Relationship between Family Status and Academic Achievement in Children"
 # Author: Ruibo Sun
-# Date: 16 March 2023
+# Date: 12 April 2023
 # Contact: ruibo.sun@mail.utoronto.ca
 # License: MIT
-# Pre-requisites: Download package of tidyverse under the Workspace section
+# Pre-requisites: None
 # Any other information needed? None
 
 
@@ -13,41 +13,65 @@ library(tidyverse)
 
 
 #### Simulate data ####
-set.seed(123) # set seed for reproducibility
+set.seed(123)
+n <- 100
 
-# generate 100 observations
-n <- 100 
+# Generate individual variables
+parent_edu <-
+  sample(
+    c(
+      "less than high school",
+      "high school",
+      "some college",
+      "bachelor's degree",
+      "graduate degree"
+    ),
+    n,
+    replace = TRUE
+  )
 
-# generate parents' education level, with higher levels of education having a greater probability of occurrence
-parent_edu <- sample(c("less than high school", "high school", "some college", "bachelor's degree", "graduate degree"), 
-                     n, 
-                     replace = TRUE)
+parent_higher_edu <-
+  ifelse(parent_edu %in% c("bachelor's degree", "graduate degree"), 1, 0)
 
-# generate a binary variable indicating whether parents have higher education or not
-parent_higher_edu <- ifelse(parent_edu %in% c("bachelor's degree", "graduate degree"), 1, 0)
+child_edu <-
+  sample(
+    c(
+      "less than high school",
+      "high school",
+      "some college",
+      "bachelor's degree",
+      "graduate degree"
+    ),
+    n,
+    replace = TRUE
+  )
 
-# generate children's education, with higher probability of occurrence if parents have higher education
-child_edu <- sample(c("less than high school", "high school", "some college", "bachelor's degree", "graduate degree"), 
-                    n, 
-                    replace = TRUE)
+child_higher_edu <-
+  ifelse(child_edu %in% c("bachelor's degree", "graduate degree"), 1, 0)
 
-# generate a binary variable indicating whether children have higher education or not
-child_higher_edu <- ifelse(child_edu %in% c("bachelor's degree", "graduate degree"), 1, 0)
+region <-
+  sample(c("North", "South", "East", "West"), n, replace = TRUE)
 
-# generate a variable indicating region of living during teenage age, with equal probability of occurrence
-region <- sample(c("North", "South", "East", "West"), n, replace = TRUE)
+prestige_score <-
+  ifelse(
+    parent_edu %in% c("bachelor's degree", "graduate degree"),
+    rnorm(n, mean = 75, sd = 15),
+    rnorm(n, mean = 50, sd = 10)
+  )
+prestige_score <-
+  ifelse(region == "East",
+         prestige_score + rnorm(n, mean = 10, sd = 5),
+         prestige_score)
+prestige_score <-
+  ifelse(region == "West",
+         prestige_score - rnorm(n, mean = 10, sd = 5),
+         prestige_score)
 
-# generate a random prestige score for parents, with higher education level and living in certain regions associated with higher scores
-prestige_score <- ifelse(parent_edu %in% c("bachelor's degree", "graduate degree"), 
-                         rnorm(n, mean = 75, sd = 15), 
-                         rnorm(n, mean = 50, sd = 10))
-prestige_score <- ifelse(region == "East", prestige_score + rnorm(n, mean = 10, sd = 5), prestige_score)
-prestige_score <- ifelse(region == "West", prestige_score - rnorm(n, mean = 10, sd = 5), prestige_score)
-
-# create a data frame with the generated variables
-simulated_data <- data.frame(parent_edu, parent_higher_edu, child_edu, child_higher_edu, region, prestige_score)
-
-
-
-
-
+# Pull them together in a tibble
+simulated_data <-
+  tibble(parent_edu,
+         parent_higher_edu,
+         child_edu,
+         child_higher_edu,
+         region,
+         prestige_score)
