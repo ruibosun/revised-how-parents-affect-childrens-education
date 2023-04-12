@@ -71,6 +71,10 @@ cleaned_data <- cleaned_data %>%
     mapres10 >= mema ~ "Above and Equal to Median"
   ))
 
+## for the model
+cleaned_data <- cleaned_data %>%
+  mutate(high_school = ifelse(degree %in% c("graduate", "bachelor's", "associate/junior college"),1,0))
+
 #### Save data ####
 write_csv(cleaned_data, "inputs/data/cleaned_GSS2021.csv")
 

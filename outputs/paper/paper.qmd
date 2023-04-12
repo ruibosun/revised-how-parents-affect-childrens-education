@@ -1,11 +1,11 @@
 ---
-title: "Exploring the Link Between Family Background and Children's Academic Achievement in the United States (2021)"
+title: "Exploring the Relation between Family Background and Children's Education Level in the United States (2021)"
 author: 
   - Ruibo Sun
 thanks: "Code and Data: https://github.com/ruibosun/revised-how-parents-affect-childrens-education"
 date: "`r Sys.time()`"
 date-format: "D MMMM YYYY"
-abstract: "This paper explores the relationship between family status variables, such as parents' socio-economic status and educational level, and their impact on children's academic achievement and education level using the data from 2021 General Social Survey (GSS). Previous studies have suggested that parents' education can positively influence their children's academic performance due to increased access to resources and greater involvement in their education. However, recent research has demonstrated that this relationship is complex and can be influenced by a variety of psychological and sociological factors. The findings suggest that parents' education, family income, and prestige score all have a positive correlation with children's education. Further research is needed to fully understand the complexities of this relationship and use the results to improve educational policies and programs."
+abstract: "This paper explores the relationship between family status variables, such as parents' socio-economic status and educational level, and their impact on children's academic achievement and education level using the data from 2021 General Social Survey (GSS). Previous studies have suggested that parents' education can positively influence their children's academic performance due to increased access to resources and greater involvement in their education. However, recent research has demonstrated that this relationship is complex and can be influenced by a variety of factors. The findings in this paper suggest that parents' education, family income, and prestige score all affect the children's education level. Further research is needed to fully understand the complexities of this relationship and use the results to improve educational policies and programs."
 format: pdf
 number-sections: true
 bibliography: references.bib
@@ -65,7 +65,7 @@ $$
 Prestige_{ij}=\mu+\alpha_i+\beta_{j}+\epsilon_{ij}
 $$ {#eq-modpr}
 
-This paper will test and explore how parents’ social-economics status can affect children’s education. The data that will be used in this paper comes from the US General Social Survey from the National Opinion Research Center at the University of Chicago. 
+This paper will test and explore how parents’ social-economics status can affect children’s education. The data that will be used in this paper comes from the US General Social Survey from the National Opinion Research Center at the University of Chicago. In this study, the "children" are the respondents and "parent" are the parents of the respondents.
 
 The factor of socio-economics status is measured using the occupation prestige score. It is a measure used in social science research to assess the level of social status or prestige associated with a particular occupation or profession, which was developed by the National Opinion Research Center at the University of Chicago. As part of the GSS, respondents are asked to rate the prestige or social standing of various occupations on a scale of 1 to 100, with higher scores indicating greater prestige. The ideal dataset would have 90,090 ratings from 1,001 raters, but due to various issues, only 82,800 ratings from 946 raters were used. Invalid or inconsistent ratings, such as cases with reversed codes, too few ratings, equal scores for all occupations, or a low standard deviation of ratings, were excluded to ensure the reliability of the occupational scores.[@smith]
 
@@ -73,9 +73,9 @@ Next,the prestige score is obtained by the @eq-modpr. $Prestige_{ij}$ is the pre
 
 Another variable that has been used is the education level, which is a number of variables to indicate the number of years the respondents have spent in school and college. Other variables will be discussed in @sec-data. 
 
-## Data cleaning
+## Data cleaning {#sec-cleaning}
 
-For simplicity purposes, only variables that are closely related to the topics are selected for further analysis. These variables are **mapres10**, **papres10**, **paeduc**, **maeduc**, **educ**, **degree**, **born**, **sex**, **reg16**, and **incom16**.
+For simplicity purposes, only variables that are closely related to the topics are selected for further analysis. These variables are **mapres10**, **papres10**, **paeduc**, **maeduc**, **educ**, **degree**, **born**, **reg16**, and **incom16**.
 
 - **mapres10**: A numeric variable indicating the respondent's mother’s prestige score.
 - **papres10**: A numeric variable indicating the respondent's father’s prestige score.
@@ -84,7 +84,6 @@ For simplicity purposes, only variables that are closely related to the topics a
 - **educ**: A numeric variable indicating the number of years of education completed by the respondent.
 - **degree**: A categorical variable indicating the highest degree earned by the respondent.
 - **born**: A categorical variable indicating the region of the US where the respondent was born.
-- **sex**: A categorical variable indicating the respondent's sex.
 - **reg16**: A categorical variable indicating the region of the US where the respondent lived at age of 16.
 - **incom16**: A categorical variable indicating the respondent's total household at age of 16.
 
@@ -94,10 +93,14 @@ As mentioned before, this paper is an revised version of [the previous paper](ht
 
 For numerical variables (**paeduc**, **maeduc**, **educ**, **mapres10** and **papres10**), multiple imputation techniques are employed to estimate and fill in the missing data points. This method generates a more accurate dataset without the missing values. Following the imputation, the resulting dataset is transformed into a new one with no NAs for further analysis.
 
-Next, any categorical variables with missing values are addressed, such as **degree**, **sex**, **born**, **reg16** and **incom16**. In this case, all these variable with NAs are removed from the data, ensuring that the analysis is only performed on complete cases. This helps to minimize any biases that might arise due to incomplete data. 
+Next, any categorical variables with missing values are addressed, such as **degree**, **born**, **reg16** and **incom16**. In this case, all these variable with NAs are removed from the data, ensuring that the analysis is only performed on complete cases. This helps to minimize any biases that might arise due to incomplete data. 
+
+The number of oberservation before data cleaning is 4032. This number decrease to 3794 because some rows with missing values. are dropped from the data.
+
+In addtion, the variable of **degree** is grouped into two levels. For respondents who have obtained at least a degree from an associate/junior college, their levels are denoted as "1", indicating they have complete a post-secondary education. For respondents who have attained only a high school diploma or possess a lower level of education, their levels are designated as "0".
 
 
-# Results* {#sec-result}
+# Results {#sec-result}
 
 This following findings are from the 2021 General Social Survey (GSS) data. 
 
@@ -109,11 +112,11 @@ This following findings are from the 2021 General Social Survey (GSS) data.
 #| tbl-cap: Number of respondents by degree for 2021 survey
 tb1 <- cleaned_data %>% count(degree) %>%
   mutate(percent=percent(x=n/sum(n)))
-tb1<-tb1%>%arrange(factor(tb1$degree,c("graduate", "bachelor's", "associate/junior college", "high school", "less than high school", NA)))
+tb1<-tb1%>%arrange(factor(tb1$degree,c("graduate", "bachelor's", "associate/junior college", "high school", "less than high school")))
 colnames(tb1) <- c("Degree", "Total", "Proportion")
 tb1%>%kable(booktabs = TRUE)
 ```
-The respondents in this study are the children and their parents' education has also been collected in the GSS. As for the response variables, children’s education level, there are two ways to measure. One is the degree, and the other one is the number of years in school. In @tbl-degree, it shows the distribution of education in terms of degrees. The data reveals that the most common degree category among the group is high school, with 1597 individuals (39.6%) having this level of education. Following this, the next most common category is a bachelor's degree, with 1036 individuals (25.7%) having completed this level of education. The data also indicates that a graduate degree is the third most common category, with 760 individuals (18.8%) having this level of education. Associate/junior college degree is less common than a bachelor's or graduate degree, with 370 individuals (9.2%) having completed this level of education. However, a smaller proportion of individuals (6.1%) have less than a high school education. Additionally, there are also 23 individuals (0.6%) whose educational degree information is not available (NA). Overall, the data provide insights into the educational distribution of the given group and may be useful for drawing conclusions and making informed decisions related to education.
+According to the @tbl-degree, the distribution of education levels in terms of degrees shows that the most prevalent category is high school education, with 1507 individuals (39.7%) falling into this group. Next in prevalence is a bachelor's degree, held by 1010 individuals (26.6%). A graduate degree is the third most common category, with 731 individuals (19.3%) having attained this level of education. In contrast, the associate/junior college degree is less frequent, with 362 individuals (9.5%) completing this level of education. The smallest proportion, 4.8%, have less than a high school education. 
 
 ```{r}
 #| label: fig-educ
@@ -126,11 +129,10 @@ The respondents in this study are the children and their parents' education has 
 ggplot(data = cleaned_data, aes(x = educ)) +
   
   geom_histogram(aes(y = ..density..), binwidth = 2, fill = "white") +
-  geom_density(alpha = .2, fill = "lightblue") +
+  geom_density(alpha = .2, fill = "green") +
   
   # geom_histogram(bins = 15, fill = "lightblue", color = "white") +
   labs(x = "Education (in Years)", y = "Density") +
-  scale_x_continuous(breaks = seq(0, 20, by = 1)) +
   theme_bw()
 ```
 The second variable utilized to quantify education is relation to the number of years of schooling. In @fig-educ, this histogram shows an overall distribution of the respondents' education in years. It is clear that the distribution is right-skewed, which indicates that there are more respondents with higher levels of education. In other words, the bulk of the respondents are clustered towards the left side of the histogram (lower levels of education), and there are relatively fewer respondents towards the right side of the histogram (higher levels of education). In short, the majority of respondents in 2021 GSS are highly educated. 
@@ -146,11 +148,11 @@ The second variable utilized to quantify education is relation to the number of 
 tb0 <- cleaned_data %>% summarise(Min = min(cleaned_data$educ,na.rm=T),
                               Median = median(cleaned_data$educ,na.rm=T),
                               Max = max(cleaned_data$educ,na.rm = T),
-                              Mean = mean(cleaned_data$educ,na.rm=T))
+                              Mean = round(mean(cleaned_data$educ,na.rm=T),digits=2))
 
 tb0 %>% kable()
 ```
-To see a more accurate numerical summary, @tbl-educ is created. In the dataset labelled @sec-data, the category denoting "no formal schooling" has been redefined as an integer value of 0. According to the information presented in the @tbl-educ table, the range of years of schooling reported by respondents spans from 0 to 20 years. The median number of years of schooling reported is 15, and the mean is 14.76904. This mean value roughly corresponds to three years in college. Taken together, these findings suggest that the respondents surveyed in the 2021 GSS have generally completed their high school education and are highly educated.
+To see a more accurate numerical summary, @tbl-educ is created. In the dataset labelled @sec-data, the category denoting "no formal schooling" has been redefined as an integer value, 0. According to the information presented in the @tbl-educ table, the range of years of schooling reported by respondents spans from 0 to 20 years. The median number of years of schooling reported is 15, and the mean is 14.82 This mean value roughly corresponds to three years in college. Taken together, these findings suggest that the respondents surveyed in the 2021 GSS have generally completed their high school education and are highly educated.
 
 
 ```{r}
@@ -179,7 +181,7 @@ ggplot(cleaned_data, aes(x = mapres10)) +
        y = "Density") +
   theme_bw()
 ```
-In @fig-parentpre, it shows the distribution of respondent’s father’s and mother’s prestige scores. The distribution of father’s prestige score and the mother’s prestige score have quite different distributions. 
+In @fig-parentpre, it shows the distribution of respondent’s father’s and mother’s prestige scores. The distribution of father’s prestige score and the mother’s prestige score have quite different distributions. Specifically, the distribution of mother's prestige score is bimodal and the distribution of father's prestige score is unimodal.
 
 ```{r}
 #| label: fig-presandeduc
@@ -213,8 +215,8 @@ In order to examine the relationship between parents’ prestige scores and chil
 #| fig-width: 8
 #| fig-height: 4
 ggplot(cleaned_data, aes(x = maeduc)) +
-geom_histogram(aes(y = ..density.., fill = "Mother's Education"), alpha = 1, binwidth = 0.5, color = "black") +
-geom_histogram(aes(x = paeduc, y = ..density.., fill = "Father's Education"), alpha = 0.8, binwidth = 0.5, color = "black") +
+  geom_histogram(aes(y = ..density.., fill = "Mother's Education"),
+                 alpha = 1, binwidth = 0.5, color ="black") +geom_histogram(aes(x = paeduc, y = ..density.., fill = "Father's Education"),alpha = 0.8, binwidth = 0.5, color = "black") +
 scale_fill_manual(values = c("Mother's Education" = "darkgreen", "Father's Education" = "lightgreen"), name = "Variables") +
 labs(x = "Education (in Years)",
 y = "Density") +
@@ -233,19 +235,46 @@ Another key variable is the parent’s education level. In @fig-parentseduc, it 
 #| fig-height: 4
 
 ggplot(cleaned_data, aes(x = educ, fill = factor(born))) +
-  geom_histogram(position = "dodge", binwidth = 1.5, alpha = 0.5, color = "black")+
+  geom_histogram(aes(y = ..density..), position = "dodge", binwidth = 1.5, alpha = 0.5, color = "black")+
    labs(x = "Education (in Years)",
-       y = "Count",
+       y = "Density",
        fill = "Birthplace of the Respondent (if in US)")+
   theme_bw()
+
+# ggplot(cleaned_data, aes(x = educ)) +
+# geom_histogram(aes(y = ..density.., fill = "Mother's Education"), alpha = 1, binwidth = 0.5, color = "black") +
+# geom_histogram(aes(x = paeduc, y = ..density.., fill = "Father's Education"), alpha = 0.8, binwidth = 0.5, color = "black") +
+# scale_fill_manual(values = c("Mother's Education" = "darkgreen", "Father's Education" = "lightgreen"), name = "Variables") +
+# labs(x = "Education (in Years)",
+# y = "Density") +
+# theme_bw()
 ```
-Based on [@overman], the birthplace may have an impact on children’s education. In @fig-birth, it is used to test the relationship between birthplace and children’s education. Note that the question of birthplace only asks if the respondent was born in the US or not. In general, most of the respondents have received at least 10 years of education despite their birthplace. However, the bar for respondents who were born outside of the US is much higher than the other groups. This is because 87.2% of the respondents were born in the US, and only 11.0% answered “no”. Additionally, there are 72 NA, which take a proportion of 1.8%. Given the huge differences in the sample sizes between groups, it is hard to draw a conclusion of whether birthplace may affect the education level.
+Based on [@overman], the birthplace may have an impact on children’s education. In @fig-birth, it is used to test the relationship between birthplace and children’s education. Note that the question of birthplace only asks if the respondent was born in the US or not. In general, most of the respondents have received at least 10 years of education despite their birthplace. However, the bar for respondents who were born outside of the US is much higher than the other groups. This is because 90% of the respondents were born in the US, and only 10.0% answered “No”. This is because respondents who did not answer this question or answered NA are removed during the data cleaning. Given the huge differences in the sample sizes between groups, it is hard to draw a general and representative conclusion of whether birthplace may affect the education level.
 
 ```{r,echo=FALSE}
 tb3 <- cleaned_data %>% 
   count(born) %>% 
   mutate(percent=percent(x=n/sum(n)))
 ```
+
+```{r}
+#| message: false
+#| echo: false
+#| warning: false
+#| label: tbl-regandeduc
+#| tbl-cap: The proportion and mean of education for different regions
+tb_reg <- cleaned_data %>% 
+  count(reg16) %>% 
+  mutate(percent=percent(x=n/sum(n)))
+
+tb_reg_avg<-cleaned_data %>%
+  group_by(reg16) %>%
+  summarise(mean_educ = round(mean(educ),digits=2))
+tb_reg<-tb_reg%>%mutate("Mean of Education"=tb_reg_avg$mean_educ)
+colnames(tb_reg)<-c("Region","Count","Percent","Mean of Education")
+tb_reg %>% kable()
+```
+The @tb-regandeduc showcases the average number of years of education for individuals in different living regions of the United States when the respondent's was 16. The highest average education level is found in the Middle Atlantic region, where the mean is 15.13 years. The East North Central region follows closely, with an average of 14.98 years of education. In the Pacific and New England regions, the mean years of education are relatively similar, with 14.94 and 14.85 years, respectively. Those regions are above the overall average, which is 14.82 from @tb_educ. On the other hand, the South Atlantic and West North Central regions also display comparable average education levels of 14.75 and 14.73 years, respectively. The Mountain region exhibits a slightly lower mean of 14.69 years. Furthermore, the East South Atlantic and West South Central regions have the lowest average education levels, with 14.10 and 14.39 years, respectively. 
 
 
 ```{r}
@@ -257,21 +286,14 @@ tb3 <- cleaned_data %>%
 #| fig-width: 8
 #| fig-height: 4
 ggplot(cleaned_data, aes(x = educ,fill = factor(reg16))) +
-  geom_histogram(binwidth = 2, color = "black") +
-  facet_wrap(~ reg16, ncol = 2)+
+  geom_histogram(aes(y = ..density..),binwidth = 2, color = "black") +
+  facet_wrap(~ reg16, ncol = 3)+
   labs(x = "Education (in Years)",
-       y = "Count")+
+       y = "Density")+
   theme_bw()+
   theme(legend.position = "none")
 ```
-According to the study [@nieuwenhuis], there appears to be an association between neighborhood and education. In the 2021 GSS, the neighbourhood variable is being measured by the living region at the age of 16. The distribution for all regions, as shown in @fig-region, follows a similar bimodal shape, with the exception of the NA group. This could indicate that the region of living has a minimal or no impact on children's education levels. However, it is important to note that the measurement of the neighborhood through living regions at age 16 may not fully capture the impact of the neighborhood on education, which will be discussed in the @sec-weakness.
-
-
-```{r,echo=FALSE}
-tb4 <- cleaned_data %>% 
-  count(reg16) %>% 
-  mutate(percent=percent(x=n/sum(n)))
-```
+According to the study [@nieuwenhuis], there appears to be an association between neighborhood and education. In the 2021 GSS, the neighbourhood variable is being measured by the living region at the age of 16. The distribution for all regions, as shown in @fig-region, follows a similar bimodal shape. This could indicate that the region of living has a minimal or no impact on children's education levels. However, it is important to note that the measurement of the neighborhood through living regions at age 16 may not fully capture the impact of the neighborhood on education, which will be discussed in the @sec-weakness.
 
 
 ```{r}
@@ -293,7 +315,7 @@ ggplot(cleaned_data, aes(x = educ, y = maeduc, color = incom16)) +
   theme_bw()
 ```
 
-To examine the relationship between family income and education, the @fig-maincome and @fig-paincome visualize this relation. In @fig-maincome, the vertical axis represents the mother’s education and the horizontal axis represents the children’s education. The respondents were asked to rate their family income at age of 16 in the following category: (1) far above average, (2) above average, (3) average, (4) below average and (5) far below average. Due to missing values, the sixth group is NA, which is coloured grey. Overall, mothers’ education and children’s education are positively correlated despite the level of income. To be more specific, for respondents whose family income was far above average, the slope seems to be steeper than the other groups, which indicates that for those with higher family income, there may be a stronger relationship between the education of the mother and the education of the children.
+To examine the relationship between family income and education, the @fig-maincome and @fig-paincome visualize this relation. In @fig-maincome, the vertical axis represents the mother’s education and the horizontal axis represents the children’s education. The respondents were asked to rate their family income at age of 16 in the following category: (1) **far above average**, (2) **above average**, (3) **average**, (4) **below average** and (5) **far below average**. Overall, mothers’ education and children’s education are positively correlated despite the level of income. To be more specific, for respondents whose family income was **far above average**, the slope seems to be steeper than the other groups, which indicates that for those with higher family income, there may be a stronger relationship between the education of the mother and the education of the children.
 
 ```{r}
 #| label: fig-paincome
@@ -314,12 +336,12 @@ ggplot(cleaned_data, aes(x = educ, y = paeduc, color = incom16)) +
   scale_color_discrete(name = "Family Income (at Age of 16)") +
   theme_bw()
 ```
-In @fig-paincome, the income groups are the same as before. However, the plot is now examining the correlation between the father’s education and the children’s education. Once again, there is a positive correlation between the education level of fathers and their children's education, regardless of family income. However, for respondents who reported a "far above average" family income, the relationship between the father's education and children's education appears to be stronger than for other income groups. This suggests that higher family income may be associated with a more pronounced link between paternal and children's education levels. Comparing the two plots, the slopes in @fig-paincome for all income groups are much steeper than the slopes in @fig-maincome. This may suggest that there is a stronger relationship between fathers' education and children's education compared to mothers' education and children's education given the same income level.
+In @fig-paincome, the income groups are the same as before. However, the plot is now examining the correlation between the father’s education and the children’s education. Once again, there is a positive correlation between the education level of fathers and their children's education, regardless of family income. However, for respondents who reported a **far above average** family income, the relationship between the father's education and children's education appears to be stronger than for other income groups. This suggests that higher family income may be associated with a more pronounced link between paternal and children's education levels. Comparing the two plots, the slopes in @fig-paincome for all income groups are much steeper than the slopes in @fig-maincome. This may suggest that there is a stronger relationship between fathers' education and children's education compared to mothers' education and children's education given the same income level.
 
 # Model* {#sec-model}
 
 $$
-\hat{Y}=\hat{\beta_0}+\hat{\beta_1}X_{mapres10}+\hat{\beta_2}X_{papres10}+\hat{\beta_3}X_{paeduc}+\hat{\beta_4}X_{maeduc}
+\log(\frac{\pi}{1-\pi})=\hat{\beta_0}+\hat{\beta_1}X_{mapres10}+\hat{\beta_2}X_{papres10}+\hat{\beta_3}X_{paeduc}+\hat{\beta_4}X_{maeduc}
 $$ {#eq-model}
 
 ```{r}
@@ -327,10 +349,10 @@ $$ {#eq-model}
 #| echo: false
 #| warning: false
 #| label: tbl-lmeduc
-#| tbl-cap: Linear Model and its Summary Statistics
+#| tbl-cap: Logistic Model and its Summary Statistics
 
 # Fit the model
-model <- lm(educ ~ mapres10 + papres10 + exp(paeduc) + exp(maeduc), data = cleaned_data)
+model <- glm(high_school ~ mapres10 + papres10 + paeduc + maeduc + incom16 + reg16, family="binomial", data = cleaned_data)
 
 modelsummary::modelsummary(
   list(
@@ -340,22 +362,14 @@ modelsummary::modelsummary(
   statistic = "conf.int"
 )
 ```
-The @tbl-lmeduc is built based on the @eq-model:
+The @tbl-lmeduc is built based on the @eq-model. In this logistic model, it is used to predict the probability of a child attains a post-secondary degree based on these predictors.
+*missing the bullet point to explain each exp(coef)*
 
-- The intercept is 11.32, which means that when all the independent variables are zero, the dependent variable has a value of 11.32.
-- The coefficients for the independent variables mapres10 and papres10 are both 0.01, which means that a one-unit increase in either of these variables is associated with an increase of 0.01 in the dependent variable.
-- The coefficients for the independent variables paeduc and maeduc are 0.18 and 0.05, respectively. This means that a one-unit increase in paeduc is associated with an increase of 0.18 in the dependent variable, and a one-unit increase in maeduc is associated with an increase of 0.05 in the dependent variable.
-- The number of observations used in the model is 1980.
-The R-squared value is 0.124, which means that the independent variables explain 12.4% of the variation in the dependent variable.
-- The adjusted R-squared value is 0.122.
-- The AIC and BIC values are measures of the goodness of fit of the model. Lower values indicate a better fit.
-- The log-likelihood is a measure of how well the model fits the data.
-- The RMSE value is 2.44, which is the root mean squared error of the model. It is a measure of how much the predictions of the model deviate from the actual values.
+From @tbl-lmeduc,the positive coefficients for both mother's and father's prestige scores (**mapres10** and **papres10**) suggest a slight positive relationship with children's education levels. Moreover, the positive coefficients for parents' education (**paeduc** and **maeduc**) have a greater positive association with children's education level.
 
-To put it another way, there exists a positive correlation between the educational attainment and societal status of parents with that of their children. However, when examining the specific factors of fathers' education and prestige score, it appears that the correlation with children's education is stronger than that of the mothers' education or prestige score.
+The coefficients for the income level at age of 16 (**incom16**) indicate that higher-income levels are generally associated with lower education levels for children. Particularly, the "far above average" and "far below average" income categories show a significant negative relationship with children's education levels.
 
-This suggests that fathers' educational background may have a particularly strong influence on their children's academic achievement and future opportunities. While the influence of mothers' education and social status is still significant, the impact of fathers' education appears to be even greater in shaping their children's educational outcomes. These findings highlight the importance of parental involvement and investment in their children's education, particularly that of the father's role in this regard.
-
+Regarding the living regional differences at age of 16 (**reg16**), the results indicate that children from the east south atlantic region may have lower education levels compared to those from other regions. The positive coefficients for middle atlantic and west north central regions suggest a positive association with children's education levels, although the results are not statistically significant. 
 
 # Discussion*
 
@@ -382,13 +396,14 @@ Despite these discrepancies, the findings in this paper concur with prior litera
 
 These findings highlight the importance of parental involvement and support in their children's education, with a particular emphasis on the role of fathers. The results suggest that fathers' education levels may have a stronger impact on their children's academic achievement than that of mothers. However, it is important to note that other factors, such as family income and race, may also play a role in student achievement. Therefore, further research is necessary to fully understand the complex relationship between these variables and their impact on academic achievement, which will be carefully discussed in @sec-weakness.
 
+## The Effect of Living Region during the Adolescent Period
+referring results from the model about how regions affect the education level
 
-## Weaknesses and next steps* {#sec-weakness}
+
+## Weaknesses and next steps {#sec-weakness}
 
 ### Weaknesses and Limitations
 As with any research, this study has its limitations and weaknesses. One significant weakness is the use of prestige scores as a variable to measure social status and occupational standing. While attempts were made to capture objective indicators of status, such as income and education, prestige scores are still subject to subjective interpretation. Cultural, social, or personal biases may influence people's perceptions of what constitutes a high-prestige occupation. Furthermore, measures of prestige are not fixed over time and may vary across different societies and historical periods. Heterogeneity within occupations can also lead to different levels of prestige among individuals. Additionally, some measures of prestige may overemphasize certain aspects of an occupation, such as income or education, while overlooking other critical factors like job security or working conditions [@prestige].
-
-Another weakness of this study is missing data. While the decision to retain all missing values was made intentionally to avoid issues with representativeness, missing data can still affect the statistical power and accuracy of estimates. It can also reduce the representativeness of the sample, potentially limiting the generalizability of the findings. Additionally, missing data can make the analysis of the study more complex, requiring more sophisticated techniques that may increase the risk of errors [@kang].
 
 Moreover, this study did not use hypothesis testing, which could potentially overlook some effects that might be present in the data. Therefore, the generalizability of the findings should be interpreted with caution. Future studies should aim to address these limitations and weaknesses to ensure more accurate and comprehensive research on the topic.
 
@@ -397,7 +412,9 @@ To shed light in future studies, there are some potential improvements. Firstly,
 
 Furthermore, new and accurate methodologies could be implemented for data analysis. It is evident that the sample sizes across the groups in @fig-birth are substantially different. Therefore, post-stratification may be a suitable technique to adjust for these discrepancies and verify the results. Moreover, in terms of the statistical model used in the study, a simple linear model was employed with only a few predictors. Future studies could build a more sophisticated model that accounts for potential interaction or quartic terms in the analysis to improve the understanding of the relationship under investigation. 
 
-In @fig-region, the results seem to be insignificant. One way to improve is to consider the measurement of the neighbourhood using living regions at age 16 may not provide a comprehensive representation of the impact of the neighbourhood on education. Other factors, such as the quality of schools and access to resources, may also play a significant role in educational outcomes but are not captured by this measure. Therefore, it is possible that the relationship between neighbourhood and education is more complex than what can be inferred from the living region at age 16 alone. While the distribution of education levels among neighbourhoods may appear similar based on @fig-region, it is still possible that there are significant differences in educational outcomes that are not apparent in the bimodal shape of the distribution. Further research using more detailed measures of neighbourhood characteristics and educational outcomes could provide a more nuanced understanding of the relationship between neighbourhood and education.
+In the @fig-region, the results seem to be insignificant. One way to improve is to consider the measurement of the neighbourhood using living regions at age 16 may not provide a comprehensive representation of the impact of the neighbourhood on education. Other factors, such as the quality of schools and access to resources, may also play a significant role in educational outcomes but are not captured by this measure. Therefore, it is possible that the relationship between neighbourhood and education is more complex than what can be inferred from the living region at age 16 alone. While the distribution of education levels among neighbourhoods may appear similar based on @fig-region, it is still possible that there are significant differences in educational outcomes that are not apparent in the bimodal shape of the distribution. Further research using more detailed measures of neighbourhood characteristics and educational outcomes could provide a more nuanced understanding of the relationship between neighbourhood and education.
+
+In the @tbl-lmeduc, a logistic model is employed with the degree as the response variable. However, using a linear regression model with years of education as the response variable may provide a more detailed examination of the factors involved. A linear regression can help analyze specific relationships, such as how years of education change with a five-unit increase in parents' prestige scores. This study opted not to use the linear model due to violations of underlying assumptions. Future research may improve upon this by constructing a more sophisticated linear regression model to elucidate the relationship between these variables in a more precise manner.
 
 While this data and study provide valuable insights into children's education and performance, it is important to acknowledge that some key factors have not been included. One such variable is the positive involvement of parents in their children's education. Research has consistently shown that parental involvement can have a significant impact on children's academic success, yet this aspect was not measured in the 2021 GSS [@parentinvolvement]. Therefore, it is essential to include these factors in future studies to fully understand the complex interplay between different variables and their effects on children's education. By including factors like parental involvement, future studies could provide a more comprehensive understanding of the various factors that influence children's education and help to identify effective strategies for improving educational outcomes. 
 
