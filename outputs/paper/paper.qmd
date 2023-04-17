@@ -95,7 +95,7 @@ Next, any categorical variables with missing values are addressed, such as **deg
 
 The number of observations before data cleaning is 4032. This number decrease to 3794 because some rows with missing values. are dropped from the data.
 
-In addition, the variable of **degree** is grouped into two levels. For respondents who have obtained at least a degree from an associate/junior college, their levels are denoted as "1", indicating they have completed a post-secondary education. For respondents who have attained only a high school diploma or possess a lower level of education, their levels are designated as "0".
+In addition, the variable of **degree** is grouped into two levels. For respondents who have obtained at least a degree from an associate/junior college, their levels are denoted as "1", indicating they have completed a post-secondary education. This is because the logistic model only takes binary response variable. Hence, for respondents who have attained only a high school diploma or possess a lower level of education, their levels are labelled as "0".
 
 
 # Results {#sec-result}
