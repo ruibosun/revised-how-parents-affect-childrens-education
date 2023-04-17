@@ -75,6 +75,9 @@ cleaned_data <- cleaned_data %>%
 cleaned_data <- cleaned_data %>%
   mutate(high_school = ifelse(degree %in% c("graduate", "bachelor's", "associate/junior college"),1,0))
 
+cleaned_data$incom16 <- as.factor(cleaned_data$incom16)
+cleaned_data$incom16 <- relevel(cleaned_data$incom16, ref = "average")
+
 #### Save data ####
 write_csv(cleaned_data, "inputs/data/cleaned_GSS2021.csv")
 
