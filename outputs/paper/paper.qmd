@@ -50,13 +50,13 @@ In short, the findings in this paper demonstrate that parents' education has a p
 
 The data will be presented clearly and succinctly with plots and tables. This following analysis is processed in `R` [@R] with packages `tidyverse` [@tidyverse], `dplyr` [@dplyr], `here` [@here], `haven` [@haven] and `broom` [@broom]. The tables are constructed via `knitr` [@knitr], `scales` [@scales] and kableExtra [@kableExtra]. The package inside `tidyverse` helps to create the plots in `ggplot2` [@tidyverse]. The missing values were imputed using `mice` [@mice]. This paper is knitted as a PDF file by the packages of Quarto and `patchwork` [@patchwork].
 
-417 add a paragraph for each section 
+The structure of this paper comprises several sections. In the @sec-data, it introduces the source of the data and the cleaning process, as well as the characteristics of the variables. In the @sec-result, it reveals some findings from the data regarding how parents' backgrounds may affect children's education levels. In the @sec-discussion, it take a closer look at the results and compares them with the published researches. Additionally, the @sec-weakness lists some of the potential limitations of the paper and sheds light on future studies. The section of @sec-conclusion is the conclusion of the paper. Lastly, a mock survey related to the topic of this paper can be found in the @sec-appendix.
 
 
-
-# Data {#sec-data} (417 add the graph for data)
+# Data {#sec-data}
 
 ## Source
+
 The 2021 General Social Survey (GSS) is a nationally representative survey conducted to collect data on social trends and attitudes among people living in the United States. Data was collected through face-to-face interviews with adult residents, covering a wide range of variables that are of interest to social scientists, policymakers, and the general public. The variables measured in the survey include demographics, employment, education, health, family, and social attitudes [@gss_data_explorer]. 
 
 The target population is US adults aged 18 and older. The GSS uses a multistage probability sampling approach to recruit its sample from the US Census Bureau's Master Address File. One strength of the GSS is its long history and large sample size, but a potential weakness is a reliance on self-reported data, which can be subject to response bias. The questionnaire includes both closed-ended and open-ended questions, but there may be concerns about biased or leading questions. The GSS employs various methods to adjust for non-response and ensure the representativeness of the sample. The questionnaire includes both closed-ended and open-ended questions, but there may be concerns about biased or leading questions. [@norcuofch]. The GSS employs various methods to adjust for non-response and ensure the representativeness of the sample. The limitations will be explained in detail in @sec-weakness.
@@ -100,9 +100,7 @@ The number of observations before data cleaning is 4032. This number decreases t
 In addition, the variable of **degree** is grouped into two levels. For respondents who have obtained at least a degree from an associate/junior college, their levels are denoted as "1", indicating they have completed a post-secondary education. This is because the logistic model only takes binary response variable. Hence, for respondents who have attained only a high school diploma or possess a lower level of education, their levels are labelled as "0".
 
 
-# Results {#sec-result}
-
-This following findings are from the 2021 General Social Survey (GSS) data. 
+## Characteristics of the variables
 
 ```{r}
 #| message: false
@@ -215,33 +213,6 @@ ggplot(cleaned_data, aes(x = mapres10)) +
 @fig-parentpre shows the distribution of respondent's father's and mother's prestige scores. The distribution of father's prestige score and the mother's prestige score have quite different distributions. Specifically, the distribution of mother's prestige score is bimodal and the distribution of father's prestige score is unimodal.
 
 ```{r}
-#| label: fig-presandeduc
-#| fig-cap: Mother's and Father's Prestige Score with children's education
-#| echo: false
-#| warning: false
-#| message: false
-#| fig-width: 8
-#| fig-height: 4
-
-#pres vs. educ
-p1 <- ggplot(cleaned_data, aes(x = educ, y = papres10)) +
-  geom_point(color = "#69b3a2",
-             size = 2,
-             alpha = 0.3) +
-  labs(x = "Education (in Years)", y = "Father's Prestige Score") +
-  theme_bw()
-p2 <- ggplot(cleaned_data, aes(x = educ, y = mapres10)) +
-  geom_point(color = "darkgreen",
-             size = 2,
-             alpha = 0.3) +
-  labs(x = "Education (in Years)", y = "Mother's Prestige Score") +
-  theme_bw()
-
-p1 + p2
-```
-In order to examine the relationship between parents' prestige scores and children's education level. The next plot, @fig-presandeduc, is used to show the relation. These two scatter plots show the father's prestige score and the mother's prestige score with their children's education. It is hard to see a clear relation or pattern based on these two scatter plots. To verify if the prestige score is one of the factors, a linear model will be used in the @sec-model.
-
-```{r}
 #| label: fig-parentseduc
 #| fig-cap: Mother's Education and Father's Education Level
 #| echo: false
@@ -329,6 +300,38 @@ tb_reg %>% kable()
 
 @tbl-regandeduc showcases the average number of years of education for individuals in different living regions of the United States when the respondent was 16. The highest average education level is found in the Middle Atlantic region, where the mean is 15.13 years. The East North Central region follows closely, with an average of 14.98 years of education. In the Pacific and New England regions, the mean years of education are relatively similar, with 14.94 and 14.85 years, respectively. Those regions are above the overall average, which is 14.82 from @tbl-educ. On the other hand, the South Atlantic and West North Central regions also display comparable average education levels of 14.75 and 14.73 years, respectively. The Mountain region exhibits a slightly lower mean of 14.69 years. Furthermore, the East South Atlantic and West South Central regions have the lowest average education levels, with 14.10 and 14.39 years, respectively. 
 
+# Results {#sec-result}
+
+This following findings are from the 2021 General Social Survey (GSS) data. 
+
+```{r}
+#| label: fig-presandeduc
+#| fig-cap: Mother's and Father's Prestige Score with children's education
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-width: 8
+#| fig-height: 4
+
+#pres vs. educ
+p1 <- ggplot(cleaned_data, aes(x = educ, y = papres10)) +
+  geom_point(color = "#69b3a2",
+             size = 2,
+             alpha = 0.3) +
+  labs(x = "Education (in Years)", y = "Father's Prestige Score") +
+  theme_bw()
+p2 <- ggplot(cleaned_data, aes(x = educ, y = mapres10)) +
+  geom_point(color = "darkgreen",
+             size = 2,
+             alpha = 0.3) +
+  labs(x = "Education (in Years)", y = "Mother's Prestige Score") +
+  theme_bw()
+
+p1 + p2
+```
+
+In order to examine the relationship between parents' prestige scores and children's education level. The next plot, @fig-presandeduc, is used to show the relation. These two scatter plots show the father's prestige score and the mother's prestige score with their children's education. It is hard to see a clear relation or pattern based on these two scatter plots. To verify if the prestige score is one of the factors, a linear model will be used in the @sec-model.
+
 ```{r}
 #| label: fig-region
 #| fig-cap: Respondent's Living Region at Age of 16 with Education
@@ -395,7 +398,7 @@ ggplot(cleaned_data, aes(x = educ, y = paeduc, color = incom16)) +
 
 In @fig-paincome, the income groups are the same as before. However, the plot is now examining the correlation between the father's education and the children's education. Once again, there is a positive correlation between the education level of fathers and their children's education, regardless of family income. However, for respondents who reported a **far above average** family income, the relationship between the father's education and children's education appears to be stronger than for other income groups. This suggests that higher family income may be associated with a more pronounced link between paternal and children's education levels. Comparing the two plots, the slopes in @fig-paincome for all income groups are much steeper than the slopes in @fig-maincome. This may suggest that there is a stronger relationship between fathers' education and children's education compared to mothers' education and children's education given the same income level.
 
-# Model {#sec-model}
+## Model {#sec-model}
 
 We estimate the following mode:
 
@@ -465,13 +468,13 @@ Using the @eq-coef, the coefficients of the model can be interpreted as follow a
 - **Respondent's Living Region in West South Central at 16(reg16west south central)**: The odds of a child completing high school for respondents living in the West South Central region at age 16 are exp(-0.33) = 0
  
 
-# Discussion
+# Discussion {#sec-discussion}
 
 ## Average years of schooling in the US and Outside of US
 
 Education has been a crucial driver of social and economic progress worldwide, and its expansion over the past two centuries has been a significant phenomenon. The global average year of schooling currently stands at around 8.7 years, according to data from World Economics [@world_economics].
 
-In this paper, by examining the average year of schooling in the United States, based on 2021 GSS data, it was found that the average year of schooling is 14 in @tbl-educ. This result is consistent with the findings from Our World in Data, which indicate that the average year of schooling in the US is also 14 years [@global_education].
+In the previous paper, the average year of schooling in the United States, based on 2021 GSS data, it was found that the average year of schooling is 14.76 and the avergae now is 14.82 in @tbl-educ. Despite the tiny changes in numbers due to the multiple imputation, this result is still consistent with the findings from Our World in Data, which indicate that the average year of schooling in the US is also 14 years [@global_education].
 
 Furthermore, the data in @tbl-degree reveals that a bachelor's degree and a graduate degree are the second and third most common educational categories in the US, respectively. This finding suggests that having an associate or junior college degree is less common compared to the bachelor's or graduate degree. Conversely, a smaller proportion of individuals have less than a high school education.
 
@@ -505,19 +508,19 @@ Regarding the living regional differences at age of 16 from @tbl-lmeduc, the coe
 
 According to the US News rankings in 2022, these are the top 8 high schools in the US. Thomas Jefferson High School for Science and Technology is located in the South Atlantic region in Virginia, as is the Academic Magnet High School in South Carolina and the School for Advanced Studies (SAS) in Florida. The Signature School can be found in the East North Central region in Indiana, while the Payton College Preparatory High School is also located in the East North Central region in Illinois. The Davidson Academy of Nevada is situated in the Mountain region in Nevada. The Central Magnet School is in the East South Central region in Tennessee, and The School for the Talented and Gifted (TAG) is located in the West South Central region in Texas [@best].
 
-It's noteworthy that none of the top schools are from the Middle Atlantic or New England regions, which have positive coefficients in the model. This discrepancy could be due to differences in time. School rankings can change over the years as states develop, and the GSS respondents were born in a different time period. This leads to a mismatch between the rankings and the model's coefficients.
+It is noteworthy that none of the top schools are from the Middle Atlantic or New England regions, which have positive coefficients in the model. This discrepancy could be due to differences in time. School rankings can change over the years as states develop, and the GSS respondents were born in a different time period. This leads to a mismatch between the rankings and the model's coefficients.
 
 These findings highlight the importance of parental involvement and support in their children's education, with a particular emphasis on the role of fathers. The results suggest that fathers' education levels may have a stronger impact on their children's academic achievement than that of mothers. However, it is important to note that other factors, such as family income and race, may also play a role in student achievement. Therefore, further research is necessary to fully understand the complex relationship between these variables and their impact on academic achievement, which will be carefully discussed in @sec-weakness.
 
-## Weaknesses and next steps {#sec-weakness}
+# Weaknesses and next steps {#sec-weakness}
 
-### Weaknesses
+## Weaknesses
 
 As with any research, this study has its limitations and weaknesses. One significant weakness is the use of prestige scores as a variable to measure social status and occupational standing. While attempts were made to capture objective indicators of status, such as income and education, prestige scores are still subject to subjective interpretation. Cultural, social, or personal biases may influence people's perceptions of what constitutes a high-prestige occupation. Furthermore, measures of prestige are not fixed over time and may vary across different societies and historical periods. Heterogeneity within occupations can also lead to different levels of prestige among individuals. Additionally, some measures of prestige may overemphasize certain aspects of an occupation, such as income or education, while overlooking other critical factors like job security or working conditions [@prestige].
 
 Moreover, this study did not use hypothesis testing, which could potentially overlook some effects that might be present in the data. Therefore, the generalizability of the findings should be interpreted with caution. Future studies should aim to address these limitations and weaknesses to ensure more accurate and comprehensive research on the topic.
 
-### Next Steps
+## Next Steps
 
 To shed light in future studies, there are some potential improvements. Firstly, it may be beneficial to incorporate additional measurements for social-economic statuses, such as the International Socio-Economic Index of Occupational Status (ISEI). This index is derived from the International Standard Classification of Occupations (ISCO) and comprises comparably coded data on education, occupation, and income from 73,901 full-time employed workers across 16 countries [@international].
 
@@ -531,7 +534,13 @@ While this data and study provide valuable insights into children's education an
 
 Lastly, the study's data was limited to individuals who responded to the 2021 GSS survey in the US, which may not be representative of the entire population. Respondents who chose to participate in the survey may have different characteristics than non-respondents, which could affect the generalizability of the study's findings to the wider population.
 
-# Appendix
+# Conclusion {#sec-conclusion}
+
+Education is a critical component in both social and economic progress. Therefore, understanding educational trends in the US has valuable implications for policymaking and decision-making. This paper examines the impact of family income level, parental education, and living regions during adolescence on children's education. Higher income levels are generally associated with higher education levels for children, and fathers' education levels have a stronger impact on their children's academic achievement than mothers' education levels. The influence of both parents is still significant.
+
+Adolescent living environments also influence completion of a postsecondary degree. Although the results are not statistically significant, the Middle Atlantic and New England regions demonstrate a favourable connection with children's educational levels. These findings highlight the significance of parental involvement and support in children's education, with a particular emphasis on the role of fathers. Future research is needed to properly comprehend the complex relationship between these variables and their impact on children's educational attainment. 
+
+# Appendix {#sec-appendix}
 
 ## Link to the Survey
 Please view the survey by this [link](https://forms.office.com/Pages/ResponsePage.aspx?id=JsKqeAMvTUuQN7RtVsVSEIL6CTEUDb9LuJG06wrhLr9UMTNRNUNFS0tFT0hVTVM4UVFXWDdINFY5Sy4u).
