@@ -400,7 +400,7 @@ In @fig-paincome, the income groups are the same as before. However, the plot is
 
 ## Model {#sec-model}
 
-We estimate the following mode:
+We estimate the following model:
 
 $$
 \log\left(\frac{\pi}{1-\pi}\right)=\hat{\beta_0}+\hat{\beta_1}X_{\mbox{mapres10}}+\hat{\beta_2}X_{\mbox{papres10}} + \hat{\beta_3}X_{\mbox{paeduc}} + \hat{\beta_4}X_{\mbox{maeduc}}
@@ -429,7 +429,7 @@ $$
 \mbox{Odds}=\frac{\pi}{1-\pi}=\mbox{exp}(\hat{\beta_0}+\hat{\beta_1}X_{\mbox{mapres10}}+\hat{\beta_2}X_{\mbox{papres10}} + \hat{\beta_3}X_{\mbox{paeduc}} + \hat{\beta_4}X_{\mbox{maeduc}})
 $$ {#eq-coef}
 
-The @tbl-lmeduc is built based on the @eq-model. In this logistic model, it is used to predict the probability of a child attains a post-secondary degree based on these predictors.
+The @tbl-lmeduc is built based on the @eq-model. In this logistic model, it is used to predict the probability of a child attains a post-secondary degree based on these predictors. In other words, the estimand of interest is the probability for children to complete the post-secondary degree.
 
 Using the @eq-coef, the coefficients of the model can be interpreted as follow and note that the base group for income level is `Average` and for region is `East North Central`: 
 
